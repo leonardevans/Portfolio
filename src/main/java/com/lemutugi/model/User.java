@@ -54,9 +54,9 @@ public class User extends Auditable<String>{
     @Column(columnDefinition = "TEXT")
     private String careerSummary;
 
-    private Boolean accountNonExpired;
-    private Boolean accountNonLocked;
-    private Boolean credentialsNonExpired;
+    private Boolean accountNonExpired = true;
+    private Boolean accountNonLocked = true;
+    private Boolean credentialsNonExpired = true;
 
     @NotNull
     @Enumerated(EnumType.STRING)

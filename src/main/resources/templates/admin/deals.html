@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/admin_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Deals</title>
+</head>
+<body>
+
+<!-- Content Header (Page header) -->
+<div class="content-header" layout:fragment="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Deals</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+                    <li class="breadcrumb-item active">Deals</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+
+        <!--        responses-->
+        <div class="row">
+            <div class=" text-danger" th:if="${param.not_found}">Deal not found</div>
+            <div class=" text-success" th:if="${param.add_success}">Deal added successfully</div>
+            <div class=" text-success" th:if="${param.update_success}">Deal updated successfully</div>
+            <div class=" text-success" th:if="${param.delete_success}">Deal deleted successfully</div>
+            <div class=" text-danger" th:if="${param.delete_error}">Failed to delete Deal</div>
+            <div class=" text-danger" th:if="${param.update_error}">Error updating Dealt</div>
+        </div>
+        <!--        responses-->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<!-- Main content -->
+<section class="content" layout:fragment="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Deals</h3>
+
+            <div class="card-tools">
+                <a class="btn btn-success btn-sm" th:href="@{/admin/deals/add}">
+                    <i class="fas fa-folder">
+                    </i>
+                    Add
+                </a>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Product Image
+                    </th>
+                    <th>
+                        Product Name
+                    </th>
+                    <th>
+                        Product Price
+                    </th>
+                    <th>
+                        Deal Price
+                    </th>
+                    <th>
+                        Start Date
+                    </th>
+                    <th>
+                        End Date
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="deal, dealsCount : ${deals}">
+                    <td>[[${__${dealsCount.index}__ + 1}]]</td>
+                    <td>
+                        <a th:href="@{/admin/products/edit/{productId} (productId=${deal.product.id})}">
+                            <img th:src="@{${deal.product.imageUrl}}" alt="Product Image" class="img-size-50">
+                        </a>
+                    </td>
+                    <td>[[${deal.product.name}]]</td>
+                    <td>
+                        [[${deal.product.price}]]
+                    </td>
+                    <td>
+                        [[${deal.dealPrice}]]
+                    </td>
+                    <td>
+                        [[${deal.startDate}]]
+                    </td>
+                    <td>
+                        [[${deal.endDate}]]
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" th:href="@{/admin/deals/edit/{dealId} (dealId=${deal.id})}">
+                            <i class="fas fa-pencil-alt">
+                            </i>
+                            Edit
+                        </a>
+                        <a class="btn btn-danger btn-sm" th:href="@{/admin/deals/delete/{dealId} (dealId=${deal.id})}">
+                            <i class="fas fa-trash">
+                            </i>
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="row mt-5">
+                <div class="col-sm-12 col-md-5" >
+                    <div class="dataTables_info" id="example2_info" role="status" aria-live="polite" th:if="${totalItems > 0}">Showing [[
+                        ${pageSize} * (${currentPage} - 1) +1 ]] to [[ ${pageSize} * (${currentPage} - 1) + ${deals.size()} ]] of
+                        [[${totalItems}]] entries
+                    </div>
+
+                    <div class="dataTables_info" id="example2_info" role="status" aria-live="polite" th:unless="${totalItems > 0}">Showing 0 of
+                        0 entries
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-7" th:if="${totalPages > 1}">
+                    <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                        <ul class="pagination">
+                            <li class="paginate_button page-item previous" id="example2_previous">
+
+                                <a th:if="${currentPage > 1}"
+                                   th:href="@{'/admin/deals/page/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                   aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                                <span class="page-link disabled" th:unless="${currentPage > 1}">Previous <span
+                                        class="sr-only">(current)</span> </span>
+                            </li>
+                            <li th:each="i: ${#numbers.sequence(1, totalPages)}"
+                                th:class="${currentPage != i ? 'paginate_button page-item' : 'paginate_button page-item active'}">
+                                <a th:if="${currentPage != i}"
+                                   th:href="@{'/admin/deals/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                   aria-controls="example2" data-dt-idx="2"
+                                   tabindex="0" class="page-link">[[${i}]]</a>
+                                <span class="page-link"  th:if="${currentPage == i}">[[${i}]] <span class="sr-only">(current)</span> </span>
+                            </li>
+
+                            <li class="paginate_button page-item next" id="example2_next">
+                                <a th:if="${currentPage < totalPages}"
+                                   th:href="@{'/admin/deals/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                   aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+                                <span class="page-link disabled" th:unless="${currentPage < totalPages}">Next <span
+                                        class="sr-only">(current)</span> </span>
+                            </li>
+                            <li class="paginate_button page-item next" >
+                                <a th:if="${currentPage < totalPages}"
+                                   th:href="@{'/admin/deals/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                   aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Last</a>
+                                <span class="page-link disabled" th:unless="${currentPage < totalPages}">Last <span
+                                        class="sr-only">(current)</span> </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+
+    <!-- /.content -->
+</section>
+
+</body>
+</html>

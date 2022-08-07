@@ -2,6 +2,7 @@ package com.lemutugi;
 
 import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
+import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.model.enums.ERole;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.repository.UserRepository;
@@ -27,8 +28,7 @@ public class ApplicationInitializer  implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-
+        loadData();
     }
 
     private void loadData(){
@@ -61,6 +61,8 @@ public class ApplicationInitializer  implements CommandLineRunner {
             admin.setEmail(adminEmail);
             admin.setPassword(passwordEncoder.encode("lemutugi2022"));
             admin.setEnabled(true);
+            admin.setEmail_verified(true);
+            admin.setProvider(AuthProvider.local);
 
             //            get user role and add this role to admin
             Optional<Role> userRole = roleRepository.findByName(ERole.ROLE_USER.name());
