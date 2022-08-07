@@ -26,8 +26,13 @@ public class User extends Auditable<String>{
 
 
     private String password;
+
+    @Column(nullable = false)
     private boolean enabled = false;
+
+    @Column(nullable = false)
     private boolean email_verified = false;
+
     private String fName;
     private String lName;
     private String tagline;
@@ -54,8 +59,13 @@ public class User extends Auditable<String>{
     @Column(columnDefinition = "TEXT")
     private String careerSummary;
 
+    @Column(nullable = false)
     private Boolean accountNonExpired = true;
+
+    @Column(nullable = false)
     private Boolean accountNonLocked = true;
+
+    @Column(nullable = false)
     private Boolean credentialsNonExpired = true;
 
     @NotNull
@@ -64,7 +74,7 @@ public class User extends Auditable<String>{
 
     private String providerId;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
