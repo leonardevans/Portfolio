@@ -4,32 +4,40 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class SignUpRequest {
+    @NotBlank(message = "First name is required")
+    @Size(min = 3, message = "First name is too short")
+    @Size(max = 35, message = "First name is too long")
+    @Pattern(regexp = "[a-zA-Z]+", message = "First name should contain only letters")
+    private String fName;
+
+    @NotBlank(message = "Last name is required")
+    @Size(min = 3, message = "Last name is too short")
+    @Size(max = 35, message = "Last name is too long")
+    @Pattern(regexp = "[a-zA-Z]+", message = "Last name should contain only letters")
+    private String lName;
+
     @NotBlank(message = "Username is required")
-    @Size(min = 6, message = "Username too short")
-    @Size(max = 30, message = "Username too long")
-    private String userName;
+    @Size(min = 3, message = "Username is too short")
+    @Size(max = 35, message = "Username is too long")
+    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Username should contain only letters and numbers. No special characters.")
+    private String username;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Enter valid email format")
     private String email;
 
-    @NotEmpty(message = "password is required")
+    @NotBlank(message = "password is required")
+    @Size(min = 8, max = 30, message = "Please enter a minimum password of 8 characters and maximum 30")
     private String password;
 
     @NotEmpty(message = "please confirm password")
     private String confirmPassword;
 
-    private LocationRequest location;
-
-    private Set<String> role;
 }

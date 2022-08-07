@@ -2,6 +2,7 @@ package com.lemutugi.model;
 
 import com.lemutugi.audit.Auditable;
 import com.lemutugi.model.enums.AuthProvider;
+import com.lemutugi.payload.request.SignUpRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -85,4 +86,15 @@ public class User extends Auditable<String>{
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Location location;
+
+    public User(SignUpRequest signUpRequest, String password, boolean enabled, boolean email_verified, AuthProvider provider) {
+        this.username = signUpRequest.getUsername();
+        this.email = signUpRequest.getEmail();
+        this.password = password;
+        this.enabled = enabled;
+        this.email_verified = email_verified;
+        this.fName = signUpRequest.getFName();
+        this.lName = signUpRequest.getLName();
+        this.provider = provider;
+    }
 }

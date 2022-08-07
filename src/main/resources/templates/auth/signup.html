@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/main_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Sign Up</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <section class="contact-section px-3 py-5 p-md-5">
+        <div class="container">
+            <form id="contact-form" class="contact-form col-lg-8 mx-lg-auto" method="post" th:action="@{/auth/signup}" th:object="${signUpRequest}">
+                <h3 class="text-center mb-3">Sign Up</h3>
+
+                <!--success message-->
+                <div th:if="${param.success}">
+                    <div class="alert alert-danger">
+                        Failed to create Account! Please contact us is this problem persists
+                    </div>
+                </div>
+
+                <!--error message-->
+                <div th:if="${param.success}">
+                    <div class="alert alert-info">
+                        You've successfully registered an account. You can now Login with your credentials!
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="sr-only" for="fName">First Name</label>
+                        <input type="text" class="form-control" id="fName" name="fName" placeholder="First Name" th:field="*{fName}" required="" aria-required="true">
+                        <small class="form-text text-danger pt-1" th:if="${#fields.hasErrors('fName')}" th:errors="*{fName}"></small>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="sr-only" for="lName">Last Name</label>
+                        <input type="text" class="form-control" id="lName" name="lName" placeholder="Last Name" th:field="*{lName}" required="" aria-required="true">
+                        <small class="form-text text-danger pt-1" th:if="${#fields.hasErrors('lName')}" th:errors="*{lName}"></small>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <label class="sr-only" for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" th:field="*{username}" required="" aria-required="true">
+                        <small class="form-text text-danger pt-1" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <label class="sr-only" for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required="" th:field="*{email}" aria-required="true">
+                        <small class="form-text text-danger pt-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="sr-only" for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" th:field="*{password}" required="" aria-required="true">
+                        <small class="form-text text-danger pt-1" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="sr-only" for="confirmPassword">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" th:field="*{confirmPassword}" required="" aria-required="true">
+                        <small class="form-text text-danger pt-1" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></small>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <button type="submit" class="btn btn-block btn-primary py-2">Sign Up</button>
+                        <small class="form-text text-muted pt-1">Already have an account? <a th:href="@{/auth/login}" >Login </a> to your account.</small>
+                    </div>
+                </div><!--//form-row-->
+
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <a class="google btn btn-block btn-danger py-2" th:href="@{/oauth2/authorize/google}">Continue With Google <i class="fab fa-google fa-fw fa-lg"></i></a>
+                        <a class="github btn btn-block btn-secondary py-2" th:href="@{/oauth2/authorize/github}">Continue With Github <i class="fab fa-github-alt fa-fw fa-lg"></i></a>
+                    </div>
+                </div>
+            </form>
+
+        </div><!--//container-->
+
+    </section>
+
+
+
+
+</div><!--//main-wrapper-->
+
+
+
+</body>
+</html>
+

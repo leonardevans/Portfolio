@@ -1,6 +1,10 @@
 package com.lemutugi.service.impl;
 
+import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
+import com.lemutugi.model.enums.AuthProvider;
+import com.lemutugi.model.enums.ERole;
+import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.repository.UserRepository;
 import com.lemutugi.service.UserService;
@@ -49,6 +53,27 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public boolean registerUser(SignUpRequest signUpRequest) {
+        try {
+            User user = new User(signUpRequest, passwordEncoder.encode(signUpRequest.getPassword()), true, false, AuthProvider.local);
+
+            Role userRole = roleRepository.findByName(ERole.ROLE_EDITOR.name()).orElse(null);
+
+            if (userRole == null){
+                userRole = roleRepository.save(new Role(ERole.ROLE_USER.name()));
+            }
+            user.getRoles().add(userRole);
+
+            this.saveUser(user);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
