@@ -12,4 +12,7 @@ public interface UserService {
     Optional<User> getUserByUsername(String email);
     User saveUser(User user);
     boolean deleteUserById(Long id);
+    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByMobile(Long mobile);
 }

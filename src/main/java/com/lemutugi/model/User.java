@@ -47,6 +47,8 @@ public class User extends Auditable<String>{
     private String codePenUrl;
     private String company;
     private String website;
+
+    @Column(unique = true)
     private Long mobile;
 
     @Column(columnDefinition = "TEXT")
