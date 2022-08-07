@@ -1,9 +1,18 @@
 package com.lemutugi.config;
 
+import com.lemutugi.security.MyUserDetailsService;
+import com.lemutugi.security.TokenAuthenticationFilter;
+import com.lemutugi.security.oauth2.CustomOAuth2UserService;
+import com.lemutugi.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.lemutugi.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.lemutugi.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,9 +30,39 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 )
 @EnableWebSecurity
 public class SecurityConfig {
+    private final MyUserDetailsService myUserDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
+    @Autowired
+    public SecurityConfig(MyUserDetailsService myUserDetailsService, CustomOAuth2UserService customOAuth2UserService, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler, OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+        this.myUserDetailsService = myUserDetailsService;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
+        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+    }
+
+    @Bean
+    public TokenAuthenticationFilter tokenAuthenticationFilter() {
+        return new TokenAuthenticationFilter();
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /*
+      By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save
+      the authorization request. But, since our service is stateless, we can't save it in
+      the session. We'll save the request in a Base64 encoded cookie instead.
+    */
+    @Bean
+    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+        return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
 
     @Bean
@@ -58,7 +97,7 @@ public class SecurityConfig {
         return expressionHandler;
     }
 
-    @Bean
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
