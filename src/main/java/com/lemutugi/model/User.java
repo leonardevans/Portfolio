@@ -44,6 +44,10 @@ public class User extends Auditable<String>{
     @Column(columnDefinition = "TEXT")
     private String careerSummary;
 
+    private Boolean accountNonExpired;
+    private Boolean accountNonLocked;
+    private Boolean credentialsNonExpired;
+
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -52,4 +56,7 @@ public class User extends Auditable<String>{
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Location location;
 }
