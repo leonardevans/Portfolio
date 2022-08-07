@@ -1,11 +1,13 @@
 package com.lemutugi.model;
 
 import com.lemutugi.audit.Auditable;
+import com.lemutugi.model.enums.AuthProvider;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Getter
@@ -13,10 +15,15 @@ import java.util.Collection;
 @NoArgsConstructor
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"username", "mobile", "email", "id"}))
-
 public class User extends Auditable<String>{
+
+    @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(unique = true)
     private String email;
+
+
     private String password;
     private boolean enabled = false;
     private boolean email_verified = false;
@@ -47,6 +54,12 @@ public class User extends Auditable<String>{
     private Boolean accountNonExpired;
     private Boolean accountNonLocked;
     private Boolean credentialsNonExpired;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
 
     @ManyToMany
     @JoinTable(

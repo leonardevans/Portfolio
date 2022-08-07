@@ -1,16 +1,12 @@
 package com.lemutugi.model;
 
 import com.lemutugi.audit.Auditable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table
-@NoArgsConstructor
 @Getter
 @Setter
 public class Location extends Auditable<Long> {
@@ -23,6 +19,9 @@ public class Location extends Auditable<Long> {
     private String country;
 
     @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
     private long latitude;
 
     @Column(nullable = false)
@@ -32,9 +31,12 @@ public class Location extends Auditable<Long> {
     private String fullAddress;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",  referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
 
     @Column(name = "user_id")
     private Long userId;
+
+    public Location() {
+    }
 }
