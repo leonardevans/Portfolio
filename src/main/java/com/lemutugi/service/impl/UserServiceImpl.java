@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = new User(signUpRequest, passwordEncoder.encode(signUpRequest.getPassword()), true, false, AuthProvider.local);
 
-            Role userRole = roleRepository.findByName(ERole.ROLE_EDITOR.name()).orElse(null);
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER.name()).orElse(null);
 
             if (userRole == null){
                 userRole = roleRepository.save(new Role(ERole.ROLE_USER.name()));
@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
             this.saveUser(user);
         }catch (Exception e){
+            System.out.println(e.getMessage());
             e.printStackTrace();
             return false;
         }

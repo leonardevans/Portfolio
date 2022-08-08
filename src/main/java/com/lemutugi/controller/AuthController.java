@@ -56,6 +56,7 @@ public class AuthController {
         if (bindingResult.hasErrors()) return "/auth/signup";
 
         if (userService.registerUser(signUpRequest)){
+
             return "redirect:/auth/signup?success";
         }
 

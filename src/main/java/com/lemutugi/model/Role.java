@@ -13,7 +13,7 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 public class Role extends Auditable<Long> {
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "roles")

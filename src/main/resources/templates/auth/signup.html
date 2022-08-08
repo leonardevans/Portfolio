@@ -11,13 +11,13 @@
 <div layout:fragment="content">
     <section class="contact-section px-3 py-5 p-md-5">
         <div class="container">
-            <form id="contact-form" class="contact-form col-lg-8 mx-lg-auto" method="post" th:action="@{/auth/signup}" th:object="${signUpRequest}">
+            <form id="signup-form" class="contact-form col-lg-8 mx-lg-auto" method="post" th:action="@{/auth/signup}" th:object="${signUpRequest}">
                 <h3 class="text-center mb-3">Sign Up</h3>
 
                 <!--success message-->
-                <div th:if="${param.success}">
+                <div th:if="${param.error}">
                     <div class="alert alert-danger">
-                        Failed to create Account! Please contact us is this problem persists
+                        Failed to create Account! Please contact us if this problem persists
                     </div>
                 </div>
 
@@ -25,6 +25,9 @@
                 <div th:if="${param.success}">
                     <div class="alert alert-info">
                         You've successfully registered an account. You can now Login with your credentials!
+                        <script type="text/javascript">
+                            $("#signup-form").reset();
+                        </script>
                     </div>
                 </div>
 
