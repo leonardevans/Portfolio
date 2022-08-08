@@ -161,4 +161,13 @@ public class UserServiceImpl implements UserService {
     public boolean existsByMobile(Long mobile) {
         return userRepository.existsByMobile(mobile);
     }
+
+    @Override
+    public User validateResetToken(String token){
+        Optional<PasswordResetToken> passwordResetToken = passwordResetTokenRepository.findByToken(token);
+
+        if (passwordResetToken.isEmpty()) return null;
+
+        return passwordResetToken.get().getUser();
+    }
 }

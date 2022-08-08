@@ -21,4 +21,6 @@ public interface UserService {
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
     boolean existsByMobile(Long mobile);
+
+    User validateResetToken(String token);
 }

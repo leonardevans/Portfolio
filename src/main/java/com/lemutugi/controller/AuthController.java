@@ -1,5 +1,6 @@
 package com.lemutugi.controller;
 
+import com.lemutugi.model.User;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.service.RoleService;
@@ -8,10 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -86,5 +85,20 @@ public class AuthController {
         }
 
         return "redirect:/auth/forgot-password?error";
+    }
+
+    @GetMapping("/password-reset-token")
+    public ModelAndView validateResetToken(@RequestParam("token") String token, ModelAndView modelAndView){
+        User user = userService.validateResetToken(token);
+
+        if (user != null) {
+            modelAndView.setViewName("/auth/verify-token-error");
+            modelAndView.addObject("error", "Failed to verify your password reset token. Please request another password reset token");
+        }else{
+            modelAndView.setViewName("/auth/reset-password");
+            modelAndView.addObject("email", user.getEmail());
+        }
+
+        return modelAndView;
     }
 }
