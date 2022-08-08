@@ -14,14 +14,14 @@
             <form id="signup-form" class="contact-form col-lg-8 mx-lg-auto" method="post" th:action="@{/auth/signup}" th:object="${signUpRequest}">
                 <h3 class="text-center mb-3">Sign Up</h3>
 
-                <!--success message-->
+                <!--error message-->
                 <div th:if="${param.error}">
                     <div class="alert alert-danger">
                         Failed to create Account! Please contact us if this problem persists
                     </div>
                 </div>
 
-                <!--error message-->
+                <!--success message-->
                 <div th:if="${param.success}">
                     <div class="alert alert-info">
                         You've successfully registered an account. You can now Login with your credentials!

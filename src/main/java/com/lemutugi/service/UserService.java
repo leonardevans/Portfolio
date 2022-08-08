@@ -2,6 +2,7 @@ package com.lemutugi.service;
 
 import com.lemutugi.model.User;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
+import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import org.springframework.data.domain.Page;
 
@@ -23,4 +24,6 @@ public interface UserService {
     boolean existsByMobile(Long mobile);
 
     User validateResetToken(String token);
+
+    boolean resetPassword(ResetPasswordRequest resetPasswordRequest);
 }

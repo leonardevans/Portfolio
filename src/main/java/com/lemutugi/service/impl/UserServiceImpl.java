@@ -6,6 +6,7 @@ import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.model.enums.ERole;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
+import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.repository.PasswordResetTokenRepository;
 import com.lemutugi.repository.RoleRepository;
@@ -169,5 +170,26 @@ public class UserServiceImpl implements UserService {
         if (passwordResetToken.isEmpty()) return null;
 
         return passwordResetToken.get().getUser();
+    }
+
+    @Override
+    public boolean resetPassword(ResetPasswordRequest resetPasswordRequest) {
+        try {
+            // Use email to find user
+            Optional<User> optionalUser = userRepository.findByEmail(resetPasswordRequest.getEmail());
+            User tokenUser = optionalUser.get();
+
+            //set password
+            tokenUser.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
+
+//            save the user
+            userRepository.save(tokenUser);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }

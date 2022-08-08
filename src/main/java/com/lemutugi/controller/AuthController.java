@@ -70,7 +70,7 @@ public class AuthController {
     public String forgotPassword(@Valid @ModelAttribute("forgotPasswordRequest") ForgotPasswordRequest forgotPasswordRequest, BindingResult bindingResult){
 
         if(!userService.existsByEmail(forgotPasswordRequest.getEmail())) {
-            bindingResult.addError(new FieldError("forgotPasswordRequest", "email", "Email address does not exist."));
+            bindingResult.addError(new FieldError("forgotPasswordRequest", "email", "No account associated with this email."));
         }
 
 
@@ -97,5 +97,30 @@ public class AuthController {
         }
 
         return modelAndView;
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@Valid @ModelAttribute("resetPasswordRequest") ResetPasswordRequest resetPasswordRequest, BindingResult bindingResult){
+        if(!resetPasswordRequest.getConfirmPassword().equals(resetPasswordRequest.getPassword())){
+            bindingResult.addError(new FieldError("signUpRequest", "confirmPassword", "passwords should match."));
+        }
+
+        if(!userService.existsByEmail(resetPasswordRequest.getEmail())) {
+            return "redirect:/auth/reset-password?error";
+        }
+
+        if (bindingResult.hasErrors()) return "/auth/reset-password";
+
+        if (userService.resetPassword(resetPasswordRequest)){
+            return "redirect:/auth/reset-password?success";
+        }
+
+        return "redirect:/auth/reset-password?error";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPassword(Model model){
+        model.addAttribute("resetPasswordRequest", new ResetPasswordRequest());
+        return "/auth/reset-password";
     }
 }
