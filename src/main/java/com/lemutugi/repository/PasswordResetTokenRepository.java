@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
-    boolean existsByUserAndToken(User user, String token);
+    boolean existsByToken(String token);
 }

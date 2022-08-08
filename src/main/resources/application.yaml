@@ -1,5 +1,17 @@
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
 spring:
+  mail:
+    host: mail.name.com
+    port: 587
+    username: admin@lemutugi.com
+    password: 1234
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
   thymeleaf:
     cache: false
   datasource:
@@ -74,3 +86,8 @@ server:
 
 BASE_URL:
   http://localhost:8080
+
+notifications:
+  from: lemutugi@gmail.com
+  to: lemutugi@gmail.com
+  cc: lemutugi@gmail.com

@@ -1,17 +1,22 @@
 package com.lemutugi.service.impl;
 
+import com.lemutugi.model.PasswordResetToken;
 import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.model.enums.ERole;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
+import com.lemutugi.repository.PasswordResetTokenRepository;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.repository.UserRepository;
+import com.lemutugi.service.EmailSenderService;
 import com.lemutugi.service.UserService;
 import com.lemutugi.utils.Pager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +27,28 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
     PasswordEncoder passwordEncoder;
+    PasswordResetTokenRepository passwordResetTokenRepository;
+    EmailSenderService emailSenderService;
+
+    @Value("${BASE_URL}")
+    private String BASE_URL;
+
+    @Value("${notifications.to}")
+    String notificationsTo;
+
+    @Value("${notifications.from}")
+    String notificationsFrom;
+
+    @Value("${notifications.cc}")
+    String notificationsToCc;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PasswordResetTokenRepository passwordResetTokenRepository, EmailSenderService emailSenderService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
+        this.emailSenderService = emailSenderService;
     }
 
     @Override
@@ -81,13 +102,38 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest) {
         try {
+            User user = userRepository.findByEmail(forgotPasswordRequest.getEmail()).get();
+
+            PasswordResetToken passwordResetToken = new PasswordResetToken(user);
+
+            while (true){
+                if (passwordResetTokenRepository.existsByToken(passwordResetToken.getToken())){
+                    passwordResetToken.setToken(java.util.UUID.randomUUID().toString());
+                    continue;
+                }
+                break;
+            }
+
+            passwordResetToken = passwordResetTokenRepository.save(passwordResetToken);
+
+            // Create the email
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Complete Password Reset!");
+            mailMessage.setFrom(notificationsFrom);
+            mailMessage.setText("To complete the password reset process, please click here: "
+                    + BASE_URL +"/auth/password-reset-token?token=" + passwordResetToken.getToken());
+
+            // Send the email
+            emailSenderService.sendEmail(mailMessage);
+
         }catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
             return false;
         }
 
-        return false;
+        return true;
     }
 
     @Override
