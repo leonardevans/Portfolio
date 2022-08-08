@@ -1,6 +1,7 @@
 package com.lemutugi.service;
 
 import com.lemutugi.model.User;
+import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import org.springframework.data.domain.Page;
 
@@ -13,6 +14,9 @@ public interface UserService {
     Optional<User> getUserByUsername(String email);
     User saveUser(User user);
     boolean registerUser(SignUpRequest signUpRequest);
+
+    boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
+
     boolean deleteUserById(Long id);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);

@@ -4,6 +4,7 @@ import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.model.enums.ERole;
+import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.repository.UserRepository;
@@ -75,6 +76,18 @@ public class UserServiceImpl implements UserService {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest) {
+        try {
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
     }
 
     @Override

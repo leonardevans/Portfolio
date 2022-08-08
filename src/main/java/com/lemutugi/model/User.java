@@ -87,6 +87,9 @@ public class User extends Auditable<String>{
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Location location;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PasswordResetToken passwordResetToken;
+
     public User(SignUpRequest signUpRequest, String password, boolean enabled, boolean email_verified, AuthProvider provider) {
         this.username = signUpRequest.getUsername();
         this.email = signUpRequest.getEmail();

@@ -1,5 +1,6 @@
 package com.lemutugi.controller;
 
+import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.service.RoleService;
 import com.lemutugi.service.UserService;
@@ -64,7 +65,26 @@ public class AuthController {
     }
 
     @GetMapping("/forgot-password")
-    public String showForgotPasswordPage(){
+    public String showForgotPasswordPage(Model model){
+        model.addAttribute("forgotPasswordRequest", new ForgotPasswordRequest());
         return "/auth/forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@Valid @ModelAttribute("forgotPasswordRequest") ForgotPasswordRequest forgotPasswordRequest, BindingResult bindingResult){
+
+        if(!userService.existsByEmail(forgotPasswordRequest.getEmail())) {
+            bindingResult.addError(new FieldError("forgotPasswordRequest", "email", "Email address does not exist."));
+        }
+
+
+        if (bindingResult.hasErrors()) return "/auth/forgot-password";
+
+        if (userService.forgotPassword(forgotPasswordRequest)){
+
+            return "redirect:/auth/forgot-password?success";
+        }
+
+        return "redirect:/auth/forgot-password?error";
     }
 }
