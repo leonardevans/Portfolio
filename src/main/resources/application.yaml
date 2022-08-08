@@ -1,10 +1,10 @@
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
 spring:
   mail:
-    host: mail.name.com
+    host: smtp.googlemail.com
     port: 587
-    username: admin@lemutugi.com
-    password: 1234
+    username: 1032792@cuea.edu
+    password: '@cuea.edu'
     properties:
       mail:
         smtp:
