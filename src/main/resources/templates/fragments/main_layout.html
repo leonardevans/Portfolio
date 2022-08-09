@@ -88,6 +88,11 @@
 </th:block>
 
 <th:block layout:fragment="javascript">
+  <script type="text/javascript">
+    function resetForm(id){
+      $("#" + id).reset();
+    }
+  </script>
 </th:block>
 </body>
 </html>
