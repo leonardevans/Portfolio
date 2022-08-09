@@ -1,6 +1,6 @@
 package com.lemutugi.model.enums;
 
 public enum TokenType {
-    EMAIL_CONFIRMATION,
+    EMAIL_VERIFIATION,
     PASSWORD_RESET
 }

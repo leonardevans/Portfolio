@@ -93,7 +93,6 @@ public class UserServiceImpl implements UserService {
 
             user = this.saveUser(user);
 
-            Token token = new Token(user, TokenType.EMAIL_CONFIRMATION.name());
         }catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -108,17 +107,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userRepository.findByEmail(forgotPasswordRequest.getEmail()).get();
 
-            Token token = new Token(user, TokenType.PASSWORD_RESET.name());
-
-            while (true){
-                if (tokenRepository.existsByTokenAndType(token.getToken() , TokenType.PASSWORD_RESET.name())){
-                    token.setToken(java.util.UUID.randomUUID().toString());
-                    continue;
-                }
-                break;
-            }
-
-            token = tokenRepository.save(token);
+            Token token = createToken(user, TokenType.PASSWORD_RESET);
 
             // Create the email
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -194,5 +183,19 @@ public class UserServiceImpl implements UserService {
         }
 
         return true;
+    }
+
+    private Token createToken(User user, TokenType tokenType){
+        Token token = new Token(user, tokenType.name());
+
+        while (true){
+            if (tokenRepository.existsByTokenAndType(token.getToken() , tokenType.name())){
+                token.setToken(java.util.UUID.randomUUID().toString());
+                continue;
+            }
+            break;
+        }
+
+        return tokenRepository.save(token);
     }
 }
