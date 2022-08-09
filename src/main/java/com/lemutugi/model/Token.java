@@ -12,15 +12,18 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table
-public class PasswordResetToken extends Auditable<String> {
+public class Token extends Auditable<String> {
     @Column(name = "token")
     private String token;
+
+    private String type;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    public PasswordResetToken(User user) {
+    public Token(User user, String type) {
+        this.type = type;
         this.user = user;
         this.token = java.util.UUID.randomUUID().toString();
     }

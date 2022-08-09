@@ -1,14 +1,15 @@
 package com.lemutugi.service.impl;
 
-import com.lemutugi.model.PasswordResetToken;
+import com.lemutugi.model.Token;
 import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.model.enums.ERole;
+import com.lemutugi.model.enums.TokenType;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
-import com.lemutugi.repository.PasswordResetTokenRepository;
+import com.lemutugi.repository.TokenRepository;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.repository.UserRepository;
 import com.lemutugi.service.EmailSenderService;
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
     PasswordEncoder passwordEncoder;
-    PasswordResetTokenRepository passwordResetTokenRepository;
+    TokenRepository tokenRepository;
     EmailSenderService emailSenderService;
 
     @Value("${BASE_URL}")
@@ -44,11 +45,11 @@ public class UserServiceImpl implements UserService {
     String notificationsToCc;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PasswordResetTokenRepository passwordResetTokenRepository, EmailSenderService emailSenderService) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, EmailSenderService emailSenderService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.passwordResetTokenRepository = passwordResetTokenRepository;
+        this.tokenRepository = tokenRepository;
         this.emailSenderService = emailSenderService;
     }
 
@@ -90,7 +91,9 @@ public class UserServiceImpl implements UserService {
             }
             user.getRoles().add(userRole);
 
-            this.saveUser(user);
+            user = this.saveUser(user);
+
+            Token token = new Token(user, TokenType.EMAIL_CONFIRMATION.name());
         }catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -105,17 +108,17 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userRepository.findByEmail(forgotPasswordRequest.getEmail()).get();
 
-            PasswordResetToken passwordResetToken = new PasswordResetToken(user);
+            Token token = new Token(user, TokenType.PASSWORD_RESET.name());
 
             while (true){
-                if (passwordResetTokenRepository.existsByToken(passwordResetToken.getToken())){
-                    passwordResetToken.setToken(java.util.UUID.randomUUID().toString());
+                if (tokenRepository.existsByTokenAndType(token.getToken() , TokenType.PASSWORD_RESET.name())){
+                    token.setToken(java.util.UUID.randomUUID().toString());
                     continue;
                 }
                 break;
             }
 
-            passwordResetToken = passwordResetTokenRepository.save(passwordResetToken);
+            token = tokenRepository.save(token);
 
             // Create the email
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -123,7 +126,7 @@ public class UserServiceImpl implements UserService {
             mailMessage.setSubject("Complete Password Reset!");
             mailMessage.setFrom(notificationsFrom);
             mailMessage.setText("To complete the password reset process, please click here: "
-                    + BASE_URL +"/auth/password-reset-token?token=" + passwordResetToken.getToken());
+                    + BASE_URL +"/auth/password-reset-token?token=" + token.getToken());
 
             // Send the email
             emailSenderService.sendEmail(mailMessage);
@@ -165,7 +168,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User validateResetToken(String token){
-        Optional<PasswordResetToken> passwordResetToken = passwordResetTokenRepository.findByToken(token);
+        Optional<Token> passwordResetToken = tokenRepository.findByTokenAndType(token, TokenType.PASSWORD_RESET.name());
 
         if (passwordResetToken.isEmpty()) return null;
 
