@@ -23,7 +23,9 @@ public interface UserService {
     boolean existsByUsername(String username);
     boolean existsByMobile(Long mobile);
 
-    User validateResetToken(String token);
+    User validatePasswordResetToken(String token);
+
+    boolean validateEmailToken(String token);
 
     boolean resetPassword(ResetPasswordRequest resetPasswordRequest);
 }

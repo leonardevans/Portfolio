@@ -169,12 +169,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User validateResetToken(String token){
+    public User validatePasswordResetToken(String token){
         Optional<Token> passwordResetToken = tokenRepository.findByTokenAndType(token, TokenType.PASSWORD_RESET.name());
 
         if (passwordResetToken.isEmpty()) return null;
 
         return passwordResetToken.get().getUser();
+    }
+
+    @Override
+    public boolean validateEmailToken(String token){
+        Optional<Token> optionalToken = tokenRepository.findByTokenAndType(token, TokenType.EMAIL_VERIFIATION.name());
+
+        if (optionalToken.isEmpty()) return false;
+
+        User user = optionalToken.get().getUser();
+        user.setEmail_verified(true);
+        userRepository.save(user);
+
+        return true;
     }
 
     @Override

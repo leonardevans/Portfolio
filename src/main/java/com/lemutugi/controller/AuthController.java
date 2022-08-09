@@ -4,7 +4,6 @@ import com.lemutugi.model.User;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
-import com.lemutugi.service.RoleService;
 import com.lemutugi.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -86,7 +85,7 @@ public class AuthController {
 
     @GetMapping("/password-reset-token")
     public ModelAndView validateResetToken(@RequestParam("token") String token, ModelAndView modelAndView){
-        User user = userService.validateResetToken(token);
+        User user = userService.validatePasswordResetToken(token);
 
         if (user == null) {
             modelAndView.setViewName("/auth/verify-token-message");
@@ -122,5 +121,16 @@ public class AuthController {
     public String showResetPassword(Model model){
         model.addAttribute("resetPasswordRequest", new ResetPasswordRequest());
         return "/auth/reset-password";
+    }
+
+    @GetMapping("/verify-email")
+    public String validateEmailToken(@RequestParam("token") String token, Model model){
+        if (userService.validateEmailToken(token)) {
+            model.addAttribute("successMessage", "You have successfully verified your email address.");
+        }else{
+            model.addAttribute("errorMessage", "Failed to verify your email address. Please contact us if this problem persists");
+        }
+
+        return "/auth/verify-token-message";
     }
 }

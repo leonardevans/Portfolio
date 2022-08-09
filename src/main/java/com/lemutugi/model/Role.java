@@ -19,7 +19,7 @@ public class Role extends Auditable<Long> {
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "roles_privileges",
             joinColumns = @JoinColumn(
