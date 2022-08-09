@@ -93,6 +93,19 @@ public class UserServiceImpl implements UserService {
 
             user = this.saveUser(user);
 
+            Token token = this.createToken(user, TokenType.EMAIL_VERIFIATION);
+
+            // Create the email
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Verify Email!");
+            mailMessage.setFrom(notificationsFrom);
+            mailMessage.setText("To verify your email, please click here: "
+                    + BASE_URL +"/auth/verify-email?token=" + token.getToken());
+
+            // Send the email
+            emailSenderService.sendEmail(mailMessage);
+
         }catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
