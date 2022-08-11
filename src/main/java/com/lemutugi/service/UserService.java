@@ -29,5 +29,5 @@ public interface UserService {
 
     boolean resetPassword(ResetPasswordRequest resetPasswordRequest);
 
-    Long count();
+    Long getTotalUsers();
 }

@@ -89,4 +89,14 @@ public class RoleServiceImpl implements RoleService {
         }
         return true;
     }
+
+    @Override
+    public Long getTotalRoles(){
+        return roleRepository.count();
+    }
+
+    @Override
+    public Long getTotalPrivileges(){
+        return privilegeRepository.count();
+    }
 }

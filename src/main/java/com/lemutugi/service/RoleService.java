@@ -19,4 +19,8 @@ public interface RoleService {
     Role saveRole( Role role);
     boolean deleteRoleById(Long id);
     boolean deletePrivilegeById(Long id);
+
+    Long getTotalRoles();
+
+    Long getTotalPrivileges();
 }
