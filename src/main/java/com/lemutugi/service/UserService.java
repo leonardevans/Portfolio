@@ -28,4 +28,6 @@ public interface UserService {
     boolean validateEmailToken(String token);
 
     boolean resetPassword(ResetPasswordRequest resetPasswordRequest);
+
+    Long count();
 }

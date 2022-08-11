@@ -224,4 +224,9 @@ public class UserServiceImpl implements UserService {
 
         return tokenRepository.save(token);
     }
+
+    @Override
+    public Long count(){
+        return userRepository.count();
+    }
 }

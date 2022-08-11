@@ -92,6 +92,10 @@
     function resetForm(id){
       $("#" + id).reset();
     }
+
+    $(document).ready(function() {
+      $('input').attr('autocomplete', 'off');
+    });
   </script>
 </th:block>
 </body>

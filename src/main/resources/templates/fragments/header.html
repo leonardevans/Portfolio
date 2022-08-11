@@ -8,7 +8,9 @@
 <!--Customer Header-->
 <header class="header text-center" id="header" th:fragment="header">
   <div class="force-overflow">
-    <h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Simon Doe</a></h1>
+    <h1 class="blog-name pt-lg-4 mb-0" sec:authorize="isAuthenticated()"><a href="index.html" th:text="${#authentication.getPrincipal().getName()}">Simon Doe</a></h1>
+
+    <h1 class="blog-name pt-lg-4 mb-0" sec:authorize="!isAuthenticated()"><a href="index.html">Simon Doe</a></h1>
 
     <nav class="navbar navbar-expand-lg navbar-dark" >
 
