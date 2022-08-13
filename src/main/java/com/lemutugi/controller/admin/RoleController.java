@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
-@RequestMapping("/admin/roles/*")
+@RequestMapping("/admin/roles/")
 @RolesAllowed("ROLE_ADMIN")
 @Controller
 public class RoleController {

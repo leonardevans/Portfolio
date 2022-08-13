@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/admin_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Roles</title>
+    <title>Privileges</title>
 </head>
 <body>
 
@@ -12,23 +12,23 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Roles</h1>
+                <h1 class="m-0">Privileges</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
-                    <li class="breadcrumb-item active">Roles</li>
+                    <li class="breadcrumb-item active">Privileges</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
 
 <!--        responses-->
         <div class="row">
-            <div class=" text-danger" th:if="${param.not_found}">Role not found</div>
-            <div class=" text-success" th:if="${param.add_success}">Role added successfully</div>
-            <div class=" text-success" th:if="${param.update_success}">Role updated successfully</div>
-            <div class=" text-success" th:if="${param.delete_success}">Role deleted successfully</div>
-            <div class=" text-danger" th:if="${param.delete_error}">Failed to delete role</div>
+            <div class=" text-danger" th:if="${param.not_found}">Privilege not found</div>
+            <div class=" text-success" th:if="${param.add_success}">Privilege added successfully</div>
+            <div class=" text-success" th:if="${param.update_success}">Privilege updated successfully</div>
+            <div class=" text-success" th:if="${param.delete_success}">Privilege deleted successfully</div>
+            <div class=" text-danger" th:if="${param.delete_error}">Failed to delete privilege</div>
         </div>
 <!--        responses-->
     </div><!-- /.container-fluid -->
@@ -42,10 +42,10 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Roles</h3>
+            <h3 class="card-title">Privileges</h3>
 
             <div class="card-tools">
-                <a class="btn btn-success btn-sm" th:href="@{/admin/roles/add}">
+                <a class="btn btn-success btn-sm" th:href="@{/admin/privileges/add}">
                     <i class="fas fa-folder">
                     </i>
                     Add
@@ -68,16 +68,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="role, roleCount : ${roles}">
-                    <td>[[${__${roleCount.index}__ + 1}]]</td>
-                    <td>[[${role.name}]]</td>
+                <tr th:each="privilege, privilegeCount : ${privileges}">
+                    <td>[[${__${privilegeCount.index}__ + 1}]]</td>
+                    <td>[[${privilege.name}]]</td>
                     <td>
-                        <a class="btn btn-info btn-sm" th:href="@{/admin/roles/edit/{roleId} (roleId=${role.id})}">
+                        <a class="btn btn-info btn-sm" th:href="@{/admin/privileges/edit/{privilegeId} (privilegeId=${privilege.id})}">
                             <i class="fas fa-pencil-alt">
                             </i>
                             Edit
                         </a>
-                        <a class="btn btn-danger btn-sm" th:href="@{/admin/roles/delete/{roleId} (roleId=${role.id})}">
+                        <a class="btn btn-danger btn-sm" th:href="@{/admin/roles/delete/{privilegeId} (privilegeId=${privilege.id})}">
                             <i class="fas fa-trash">
                             </i>
                             Delete
@@ -104,7 +104,7 @@
                             <li class="paginate_button page-item previous" id="example2_previous">
 
                                 <a th:if="${currentPage > 1}"
-                                   th:href="@{'/admin/roles/?pageNo=' + ${currentPage - 1}+ '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                   th:href="@{'/admin/privileges/?pageNo=' + ${currentPage - 1}+ '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
                                    aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
                                 <span class="page-link disabled" th:unless="${currentPage > 1}">Previous <span
                                         class="sr-only">(current)</span> </span>
@@ -112,7 +112,7 @@
                             <li th:each="i: ${#numbers.sequence(1, totalPages)}"
                                 th:class="${currentPage != i ? 'paginate_button page-item' : 'paginate_button page-item active'}">
                                 <a th:if="${currentPage != i}"
-                                   th:href="@{'/admin/roles/?pageNo=' + ${i}+ '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                   th:href="@{'/admin/privileges/?pageNo=' + ${i}+ '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
                                    aria-controls="example2" data-dt-idx="2"
                                    tabindex="0" class="page-link">[[${i}]]</a>
                                 <span class="page-link"  th:if="${currentPage == i}">[[${i}]] <span class="sr-only">(current)</span> </span>
@@ -120,14 +120,14 @@
 
                             <li class="paginate_button page-item next" id="example2_next">
                                 <a th:if="${currentPage < totalPages}"
-                                   th:href="@{'/admin/roles/?pageNo=' + ${currentPage + 1}+ '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                   th:href="@{'/admin/privileges/?pageNo=' + ${currentPage + 1}+ '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
                                    aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
                                 <span class="page-link disabled" th:unless="${currentPage < totalPages}">Next <span
                                         class="sr-only">(current)</span> </span>
                             </li>
                             <li class="paginate_button page-item next" >
                                 <a th:if="${currentPage < totalPages}"
-                                   th:href="@{'/admin/roles/?pageNo=' + ${totalPages}+ '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                                   th:href="@{'/admin/privileges/?pageNo=' + ${totalPages}+ '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
                                    aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Last</a>
                                 <span class="page-link disabled" th:unless="${currentPage < totalPages}">Last <span
                                         class="sr-only">(current)</span> </span>
