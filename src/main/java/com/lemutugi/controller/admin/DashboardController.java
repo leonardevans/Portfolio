@@ -2,6 +2,7 @@ package com.lemutugi.controller.admin;
 
 
 import com.lemutugi.payload.request.DashboardRequest;
+import com.lemutugi.service.PrivilegeService;
 import com.lemutugi.service.RoleService;
 import com.lemutugi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,18 @@ import javax.annotation.security.RolesAllowed;
 public class DashboardController {
     private UserService userService;
     private RoleService roleService;
+    private PrivilegeService privilegeService;
 
     @Autowired
-    public DashboardController(UserService userService, RoleService roleService) {
+    public DashboardController(UserService userService, RoleService roleService, PrivilegeService privilegeService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.privilegeService = privilegeService;
     }
 
     @GetMapping(value = {"/dashboard", "/", "/home"})
     public String showDashboard(Model model) {
-        DashboardRequest dashboardRequest = new DashboardRequest(userService.getTotalUsers(), roleService.getTotalRoles(), roleService.getTotalPrivileges());
+        DashboardRequest dashboardRequest = new DashboardRequest(userService.getTotalUsers(), roleService.getTotalRoles(), privilegeService.getTotalPrivileges());
         model.addAttribute("dashboardRequest", dashboardRequest);
         return "/admin/dashboard";
     }
