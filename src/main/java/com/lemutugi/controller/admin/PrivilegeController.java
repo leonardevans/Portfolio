@@ -22,9 +22,5 @@ public class PrivilegeController {
         this.privilegeService = privilegeService;
     }
 
-    @GetMapping({"list", "/"})
-    private String showPrivileges(@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE) int pageSize, @RequestParam(defaultValue = "name", required = false) String sortField, @RequestParam(defaultValue = "asc", required = false) String sortDir , Model model){
-        model.addAttribute("privileges", privilegeService.getAllPrivileges(pageNo, pageSize, sortField, sortDir));
-        return "/admin/privileges";
-    }
+
 }

@@ -28,11 +28,11 @@ public class RoleController {
     @GetMapping(value = {"/list", "/"})
     public String showRoles(
             @RequestParam(defaultValue = "1", required = false) int pageNo,
-            @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(defaultValue = "name", required = false) String sortField,
             @RequestParam(defaultValue = "asc", required = false) String sortDir ,
             Model model){
-        System.out.println("roleService: " + roleService);
+        int pageSize = Constants.SMALL_PAGE_SIZE;
+
         Page<Role> rolePage = roleService.getAllRoles(pageNo, pageSize, sortField, sortDir);
         List<Role> roles = rolePage.getContent();
 
