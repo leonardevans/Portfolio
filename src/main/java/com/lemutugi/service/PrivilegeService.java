@@ -1,6 +1,7 @@
 package com.lemutugi.service;
 
 import com.lemutugi.model.Privilege;
+import com.lemutugi.payload.request.PrivilegeRequest;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
@@ -14,7 +15,9 @@ public interface PrivilegeService {
 
     Optional<Privilege> getPrivilegeByName(String name);
 
-    Privilege savePrivilege(Privilege privilege);
+    Privilege updatePrivilege(PrivilegeRequest privilegeRequest);
+
+    Privilege createPrivilege(PrivilegeRequest privilegeRequest);
 
     boolean deletePrivilegeById(Long id);
 

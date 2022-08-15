@@ -1,6 +1,8 @@
 package com.lemutugi.service.impl;
 
+import com.lemutugi.exceptions.NotFoundException;
 import com.lemutugi.model.Privilege;
+import com.lemutugi.payload.request.PrivilegeRequest;
 import com.lemutugi.repository.PrivilegeRepository;
 import com.lemutugi.service.PrivilegeService;
 import com.lemutugi.utils.Pager;
@@ -40,12 +42,22 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
-    public Privilege savePrivilege(Privilege privilege) {
+    public Privilege updatePrivilege(PrivilegeRequest privilegeRequest) {
+        Privilege privilege = privilegeRepository.findById(privilegeRequest.getId()).orElseThrow(() -> new NotFoundException("No privilege found with id: " + privilegeRequest.getId()));
+        privilege.setName(privilege.getName());
+        return privilegeRepository.save(privilege);
+    }
+
+    @Override
+    public Privilege createPrivilege(PrivilegeRequest privilegeRequest) {
+        Privilege privilege = new Privilege(privilegeRequest.getName());
         return privilegeRepository.save(privilege);
     }
 
     @Override
     public boolean deletePrivilegeById(Long id) {
+        if (privilegeRepository.existsById(id)) throw new NotFoundException("No privilege found with id: " + id);
+
         try{
             privilegeRepository.deleteById(id);
         }catch (Exception e){

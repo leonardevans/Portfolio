@@ -1,7 +1,7 @@
 package com.lemutugi.controller.admin;
 
 import com.lemutugi.model.Privilege;
-import com.lemutugi.model.Role;
+import com.lemutugi.payload.request.PrivilegeRequest;
 import com.lemutugi.service.PrivilegeService;
 import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -48,5 +49,19 @@ public class PrivilegeController {
 
         model.addAttribute("privileges", privileges);
         return "/admin/privileges";
+    }
+
+    @GetMapping("/add")
+    public String showAddPrivilege(Model model){
+        model.addAttribute("privilegeRequest", new PrivilegeRequest());
+        return "/admin/add-role";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditPrivilege(@PathVariable("id") Long id, Model model){
+        Privilege
+        PrivilegeRequest privilegeRequest
+        model.addAttribute("privilegeRequest", new PrivilegeRequest());
+        return "/admin/add-role";
     }
 }
