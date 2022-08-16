@@ -32,17 +32,26 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
-    public Optional<Privilege> getPrivilegeById(Long id) {
-        return privilegeRepository.findById(id);
+    public Privilege getPrivilegeById(Long id) {
+        return privilegeRepository.findById(id).orElseThrow(() -> new NotFoundException("No privilege found with id: " + id));
     }
 
     @Override
-    public Optional<Privilege> getPrivilegeByName(String name) {
+    public boolean existsByName(String name) {
+        return privilegeRepository.existsByName(name);
+    }
+
+    @Override
+    public Optional<Privilege> getByName(String name){
         return privilegeRepository.findByName(name);
     }
 
     @Override
     public Privilege updatePrivilege(PrivilegeRequest privilegeRequest) {
+        Optional<Privilege> optionalPrivilege = privilegeRepository.findByName(privilegeRequest.getName());
+
+        if (optionalPrivilege.isPresent()) return optionalPrivilege.get();
+
         Privilege privilege = privilegeRepository.findById(privilegeRequest.getId()).orElseThrow(() -> new NotFoundException("No privilege found with id: " + privilegeRequest.getId()));
         privilege.setName(privilege.getName());
         return privilegeRepository.save(privilege);
@@ -56,7 +65,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Override
     public boolean deletePrivilegeById(Long id) {
-        if (privilegeRepository.existsById(id)) throw new NotFoundException("No privilege found with id: " + id);
+        if (!privilegeRepository.existsById(id)) throw new NotFoundException("No privilege found with id: " + id);
 
         try{
             privilegeRepository.deleteById(id);

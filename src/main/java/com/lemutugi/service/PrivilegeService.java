@@ -11,9 +11,12 @@ public interface PrivilegeService {
 
     Page<Privilege> getPrivilegesByRole(Long roleId, int pageNo, int pageSize, String sortField, String sortDirection);
 
-    Optional<Privilege> getPrivilegeById(Long id);
+    Privilege getPrivilegeById(Long id);
 
-    Optional<Privilege> getPrivilegeByName(String name);
+
+    boolean existsByName(String name);
+
+    Optional<Privilege> getByName(String name);
 
     Privilege updatePrivilege(PrivilegeRequest privilegeRequest);
 

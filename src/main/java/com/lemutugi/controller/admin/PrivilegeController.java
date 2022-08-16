@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -54,14 +54,42 @@ public class PrivilegeController {
     @GetMapping("/add")
     public String showAddPrivilege(Model model){
         model.addAttribute("privilegeRequest", new PrivilegeRequest());
-        return "/admin/add-role";
+        return "/admin/add-edit-privilege";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditPrivilege(@PathVariable("id") Long id, Model model){
-        Privilege
-        PrivilegeRequest privilegeRequest
-        model.addAttribute("privilegeRequest", new PrivilegeRequest());
-        return "/admin/add-role";
+        Privilege privilege = privilegeService.getPrivilegeById(id);
+        PrivilegeRequest privilegeRequest = new PrivilegeRequest(privilege);
+        model.addAttribute("privilegeRequest", privilegeRequest);
+        return "/admin/add-edit-privilege";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deletePrivilege(@PathVariable("id") Long id){
+        if (privilegeService.deletePrivilegeById(id)) return "redirect:/admin/privileges?delete_success";
+        return "redirect:/admin/privileges?delete_failed";
+    }
+
+    @PostMapping("/add/")
+    public String createPrivilege(@Valid @ModelAttribute("privilegeRequest") PrivilegeRequest privilegeRequest, BindingResult bindingResult){
+        if (privilegeService.existsByName(privilegeRequest.getName())){
+            bindingResult.addError(new FieldError("privilegeRequest", "name", "A privilege with this name already exist."));
+        }
+
+        if (bindingResult.hasErrors()) return "/admin/add-edit-privilege";
+
+        privilegeService.createPrivilege(privilegeRequest);
+
+        return "redirect:/admin/privileges?add_success";
+    }
+
+    @PutMapping("/update/")
+    public String updatePrivilege(@Valid @ModelAttribute("privilegeRequest") PrivilegeRequest privilegeRequest, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) return "/admin/add-edit-privilege";
+
+        privilegeService.updatePrivilege(privilegeRequest);
+
+        return "redirect:/admin/privileges?update_success";
     }
 }
