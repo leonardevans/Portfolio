@@ -20,20 +20,43 @@ public class AuthUtil {
     }
 
     public User getLoggedInUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if ( authentication == null || !authentication.isAuthenticated()) {
-            return null;
-        }
-        Object principal = authentication.getPrincipal();
-        UserDetails loggedInUser;
+        User user = null;
+
         try {
-            loggedInUser = (UserDetails) principal;
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if ( authentication == null || !authentication.isAuthenticated()) {
+                return null;
+            }
+            Object principal = authentication.getPrincipal();
+
+            UserDetails loggedInUser = (UserDetails) principal;
+            user = userRepository.findByUsername(loggedInUser.getUsername()).orElse(null);
         }
         catch (Exception e){
-            return null;
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
-        Optional<User> optionalUser = userRepository.findByUsername(loggedInUser.getUsername());
-        return optionalUser.orElse(null);
+        return user;
+    }
+
+    public String getLoggedInUsername(){
+        String username = null;
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if ( authentication == null || !authentication.isAuthenticated()) {
+                return null;
+            }
+            Object principal = authentication.getPrincipal();
+
+            UserDetails loggedInUser = (UserDetails) principal;
+            username = loggedInUser.getUsername();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return username;
     }
 }

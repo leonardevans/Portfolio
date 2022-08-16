@@ -53,7 +53,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
         if (optionalPrivilege.isPresent()) return optionalPrivilege.get();
 
         Privilege privilege = privilegeRepository.findById(privilegeRequest.getId()).orElseThrow(() -> new NotFoundException("No privilege found with id: " + privilegeRequest.getId()));
-        privilege.setName(privilege.getName());
+        privilege.setName(privilegeRequest.getName());
         return privilegeRepository.save(privilege);
     }
 

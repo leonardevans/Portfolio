@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table
 @Getter
 @Setter
-public class Location extends Auditable<Long> {
+public class Location extends Auditable<String> {
     private static final long serialVersionUID = 1L;
 
     @Column(nullable = false)

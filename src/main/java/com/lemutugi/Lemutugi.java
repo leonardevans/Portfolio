@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class Lemutugi {
     @Bean
-    public AuditorAware<Long> auditorAware(){
+    public AuditorAware<String> auditorAware(){
         return new AuditorWareImpl();
     }
 

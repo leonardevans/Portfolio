@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class PrivilegeRequest {
-    @Size(min = 3, message = "Privilege's name should be at least 3 characters")
+    @NotBlank(message = "Privilege name is required")
+    @Size(min = 3, message = "Privilege name should be at least 3 characters")
     private String name;
 
     private Long id;

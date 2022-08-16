@@ -9,16 +9,14 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class AuditorWareImpl implements AuditorAware<Long> {
+public class AuditorWareImpl implements AuditorAware<String> {
     @Autowired
     private AuthUtil authUtil;
 
     @Override
-    public Optional<Long> getCurrentAuditor() {
-        User loggedInUser = authUtil.getLoggedInUser();
+    public Optional<String> getCurrentAuditor() {
+        String loggedInUsername = authUtil.getLoggedInUsername();
 
-        if (loggedInUser == null) return Optional.empty();
-
-        return Optional.ofNullable(loggedInUser.getId());
+        return Optional.ofNullable(loggedInUsername);
     }
 }

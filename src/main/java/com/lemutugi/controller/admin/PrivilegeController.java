@@ -65,13 +65,13 @@ public class PrivilegeController {
         return "/admin/add-edit-privilege";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deletePrivilege(@PathVariable("id") Long id){
-        if (privilegeService.deletePrivilegeById(id)) return "redirect:/admin/privileges?delete_success";
-        return "redirect:/admin/privileges?delete_failed";
+        if (privilegeService.deletePrivilegeById(id)) return "redirect:/admin/privileges/?delete_success";
+        return "redirect:/admin/privileges/?delete_error";
     }
 
-    @PostMapping("/add/")
+    @PostMapping("/add")
     public String createPrivilege(@Valid @ModelAttribute("privilegeRequest") PrivilegeRequest privilegeRequest, BindingResult bindingResult){
         if (privilegeService.existsByName(privilegeRequest.getName())){
             bindingResult.addError(new FieldError("privilegeRequest", "name", "A privilege with this name already exist."));
@@ -81,15 +81,15 @@ public class PrivilegeController {
 
         privilegeService.createPrivilege(privilegeRequest);
 
-        return "redirect:/admin/privileges?add_success";
+        return "redirect:/admin/privileges/?add_success";
     }
 
-    @PutMapping("/update/")
+    @PostMapping("/update")
     public String updatePrivilege(@Valid @ModelAttribute("privilegeRequest") PrivilegeRequest privilegeRequest, BindingResult bindingResult){
         if (bindingResult.hasErrors()) return "/admin/add-edit-privilege";
 
         privilegeService.updatePrivilege(privilegeRequest);
 
-        return "redirect:/admin/privileges?update_success";
+        return "redirect:/admin/privileges/?update_success";
     }
 }
