@@ -3,6 +3,7 @@ package com.lemutugi.controller.admin;
 import com.lemutugi.model.Role;
 import com.lemutugi.payload.request.PrivilegeRequest;
 import com.lemutugi.payload.request.RoleRequest;
+import com.lemutugi.repository.PrivilegeRepository;
 import com.lemutugi.service.RoleService;
 import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,12 @@ import java.util.Optional;
 @Controller
 public class RoleController {
     private RoleService roleService;
+    private PrivilegeRepository privilegeRepository;
 
     @Autowired
-    public RoleController(RoleService roleService) {
+    public RoleController(RoleService roleService, PrivilegeRepository privilegeRepository) {
         this.roleService = roleService;
+        this.privilegeRepository = privilegeRepository;
     }
 
     @GetMapping(value = {"/list", "/"})
@@ -56,6 +59,7 @@ public class RoleController {
     @GetMapping("/add")
     public String showAddRole(Model model){
         model.addAttribute("roleRequest", new RoleRequest());
+        model.addAttribute("allPrivileges", privilegeRepository.findAll());
         return "/admin/add-edit-role";
     }
 
@@ -64,6 +68,7 @@ public class RoleController {
         Role role = roleService.getRoleById(id);
         RoleRequest roleRequest = new RoleRequest(role);
         model.addAttribute("roleRequest", roleRequest);
+        model.addAttribute("allPrivileges", privilegeRepository.findAll());
         return "/admin/add-edit-role";
     }
 
@@ -74,12 +79,15 @@ public class RoleController {
     }
 
     @PostMapping("/add")
-    public String createRole(@Valid @ModelAttribute("privilegeRequest") RoleRequest roleRequest, BindingResult bindingResult){
+    public String createRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
         if (roleService.existsByName(roleRequest.getName())){
             bindingResult.addError(new FieldError("roleRequest", "name", "A role with this name already exist."));
         }
 
-        if (bindingResult.hasErrors()) return "/admin/add-edit-role";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allPrivileges", privilegeRepository.findAll());
+            return "/admin/add-edit-role";
+        }
 
         roleService.createRole(roleRequest);
 
@@ -87,7 +95,7 @@ public class RoleController {
     }
 
     @PostMapping("/update")
-    public String updateRole(@Valid @ModelAttribute("privilegeRequest") RoleRequest roleRequest, BindingResult bindingResult){
+    public String updateRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
         Optional<Role> optionalRole = roleService.getRoleByName(roleRequest.getName());
 
         if (optionalRole.isPresent()){
@@ -96,7 +104,10 @@ public class RoleController {
             }
         }
 
-        if (bindingResult.hasErrors()) return "/admin/add-edit-role";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allPrivileges", privilegeRepository.findAll());
+            return "/admin/add-edit-role";
+        }
 
         roleService.updateRole(roleRequest);
 

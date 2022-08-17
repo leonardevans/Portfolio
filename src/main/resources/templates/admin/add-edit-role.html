@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/admin_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Add/Edit Privilege</title>
+    <title>Add/Edit Role</title>
 </head>
 <body>
 
@@ -12,13 +12,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Privileges</h1>
+                <h1 class="m-0">Roles</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
                     <li class="breadcrumb-item active">
-                        <a th:href="@{/admin/privileges/}">Privileges</a>
+                        <a th:href="@{/admin/roles/}">Roles</a>
                     </li>
                 </ol>
             </div><!-- /.col -->
@@ -48,23 +48,34 @@
                 <!-- jquery validation -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">[[${privilegeRequest.getId() == null ? 'Create' : 'Edit'}]] Privilege</h3>
+                        <h3 class="card-title">[[${roleRequest.getId() == null ? 'Create' : 'Edit'}]] Role</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form id="createProdCatForm" th:object="${privilegeRequest}" method="post" th:action="@{${privilegeRequest.getId() == null ? '/admin/privileges/add' : '/admin/privileges/update'}}">
+                    <form id="createProdCatForm" th:object="${roleRequest}" method="post" th:action="@{${roleRequest.getId() == null ? '/admin/roles/add' : '/admin/roles/update'}}">
                         <input type="hidden" name="id" class="form-control" id="privilegeId" th:field="*{id}">
 
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="privilegeName">Privilege Name</label>
-                                <input type="text" name="name" class="form-control" id="privilegeName" placeholder="Enter Name" th:field="*{name}">
-                                <small id="privilegeName-error" class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+                                <label for="roleName">Role Name</label>
+                                <input type="text" name="name" class="form-control" id="roleName" placeholder="Enter Name" th:field="*{name}">
+                                <small id="roleName-error" class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label for="rolePrivileges">Role Privileges</label>
+                                <div class="form-check" id="rolePrivileges" th:each="privilege : ${allPrivileges}">
+                                    <input type="checkbox" class="form-check-input" name="privileges"
+
+                                           th:text="${privilege.name}"
+                                           th:value="${privilege.id}"
+                                           th:field="*{privileges}"
+                                    />
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">[[${privilegeRequest.getId() == null ? 'Create' : 'Update'}]]</button>
+                            <button type="submit" class="btn btn-primary">[[${roleRequest.getId() == null ? 'Create' : 'Update'}]]</button>
                         </div>
                     </form>
                 </div>
