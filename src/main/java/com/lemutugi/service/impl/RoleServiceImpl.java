@@ -64,6 +64,7 @@ public class RoleServiceImpl implements RoleService {
             roleRepository.deleteById(id);
         }catch (Exception e){
             System.out.println(e.getMessage());
+            e.printStackTrace();
             return false;
         }
         return true;

@@ -21,7 +21,10 @@ public class Role extends Auditable<String> {
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Collection<User> users;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name = "roles_privileges",
             joinColumns = @JoinColumn(

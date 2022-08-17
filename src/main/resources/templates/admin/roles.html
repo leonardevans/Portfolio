@@ -63,6 +63,9 @@
                         Name
                     </th>
                     <th>
+                        Privileges
+                    </th>
+                    <th>
                         actions
                     </th>
                 </tr>
@@ -71,6 +74,9 @@
                 <tr th:each="role, roleCount : ${roles}">
                     <td>[[${__${roleCount.index}__ + 1} + ${pageSize} * (${currentPage} - 1) ]]</td>
                     <td>[[${role.name}]]</td>
+                    <td >
+                        <span th:each="privilege : ${role.privileges}" th:text="${privilege.name} + ', '"></span>
+                    </td>
                     <td>
                         <a class="btn btn-info btn-sm" th:href="@{/admin/roles/edit/{roleId} (roleId=${role.id})}">
                             <i class="fas fa-pencil-alt">
