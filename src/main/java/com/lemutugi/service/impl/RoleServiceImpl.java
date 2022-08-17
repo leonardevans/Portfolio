@@ -1,6 +1,8 @@
 package com.lemutugi.service.impl;
 
+import com.lemutugi.exceptions.NotFoundException;
 import com.lemutugi.model.Role;
+import com.lemutugi.payload.request.RoleRequest;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.service.RoleService;
 import com.lemutugi.utils.Pager;
@@ -25,8 +27,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Optional<Role> getRoleById(Long id) {
-        return roleRepository.findById(id);
+    public Role getRoleById(Long id) {
+        return roleRepository.findById(id).orElseThrow(() -> new NotFoundException("No role found with id: " + id));
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return roleRepository.existsByName(name);
     }
 
     @Override
@@ -35,12 +42,24 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role saveRole(Role role) {
+    public Role createRole(RoleRequest roleRequest) {
+        Role role = new Role(roleRequest);
+        return roleRepository.save(role);
+    }
+
+    @Override
+    public Role updateRole(RoleRequest roleRequest) {
+
+        Role role = roleRepository.findById(roleRequest.getId()).orElseThrow(() -> new NotFoundException("No role found with id: " + roleRequest.getId()));
+        role.setName(roleRequest.getName());
+        role.setPrivileges(roleRequest.getPrivileges());
         return roleRepository.save(role);
     }
 
     @Override
     public boolean deleteRoleById(Long id) {
+        if (!roleRepository.existsById(id)) throw new NotFoundException("No role found with id: " + id);
+
         try{
             roleRepository.deleteById(id);
         }catch (Exception e){

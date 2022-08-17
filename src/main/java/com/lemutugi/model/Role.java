@@ -1,6 +1,7 @@
 package com.lemutugi.model;
 
 import com.lemutugi.audit.Auditable;
+import com.lemutugi.payload.request.RoleRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,5 +32,10 @@ public class Role extends Auditable<String> {
 
     public Role(String name){
         this.name = name;
+    }
+
+    public Role(RoleRequest roleRequest) {
+        this.name = roleRequest.getName();
+        this.privileges = roleRequest.getPrivileges();
     }
 }

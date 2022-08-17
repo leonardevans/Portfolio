@@ -69,7 +69,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="role, roleCount : ${roles}">
-                    <td>[[${__${roleCount.index}__ + 1}]]</td>
+                    <td>[[${__${roleCount.index}__ + 1} + ${pageSize} * (${currentPage} - 1) ]]</td>
                     <td>[[${role.name}]]</td>
                     <td>
                         <a class="btn btn-info btn-sm" th:href="@{/admin/roles/edit/{roleId} (roleId=${role.id})}">

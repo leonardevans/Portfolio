@@ -28,12 +28,12 @@ public class PrivilegeController {
     }
 
     @GetMapping(value = {"/list", "/"})
-    public String showRoles(
+    public String showPrivileges(
             @RequestParam(defaultValue = "1", required = false) int pageNo,
+            @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(defaultValue = "name", required = false) String sortField,
             @RequestParam(defaultValue = "asc", required = false) String sortDir ,
             Model model){
-        int pageSize = Constants.SMALL_PAGE_SIZE;
 
         Page<Privilege> privilegePage = privilegeService.getAllPrivileges(pageNo, pageSize, sortField, sortDir);
         List<Privilege> privileges = privilegePage.getContent();
