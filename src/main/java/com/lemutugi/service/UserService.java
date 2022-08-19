@@ -1,6 +1,7 @@
 package com.lemutugi.service;
 
 import com.lemutugi.model.User;
+import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
@@ -13,7 +14,12 @@ public interface UserService {
     Optional<User> getUserById(Long id);
     Optional<User> getUserByEmail(String email);
     Optional<User> getUserByUsername(String email);
+    User createUser(UserDto userDto);
+
+    User updateUser(UserDto userDto);
+
     User saveUser(User user);
+
     boolean registerUser(SignUpRequest signUpRequest);
 
     boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest);

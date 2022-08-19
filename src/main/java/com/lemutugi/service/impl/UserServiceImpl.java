@@ -1,11 +1,13 @@
 package com.lemutugi.service.impl;
 
+import com.lemutugi.exceptions.NotFoundException;
 import com.lemutugi.model.Token;
 import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.model.enums.ERole;
 import com.lemutugi.model.enums.TokenType;
+import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
@@ -71,6 +73,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUserByUsername(String email) {
         return userRepository.findByUsername(email);
+    }
+
+    @Override
+    public User createUser(UserDto userDto) {
+        return null;
+    }
+
+    @Override
+    public User updateUser(UserDto userDto) {
+        return null;
     }
 
     @Override
@@ -144,6 +156,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUserById(Long id) {
+        if (!userRepository.existsById(id)) throw new NotFoundException("No user found with id: " + id);
         try{
             userRepository.deleteById(id);
         }catch (Exception e){
