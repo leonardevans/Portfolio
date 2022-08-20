@@ -2,7 +2,6 @@ package com.lemutugi.controller.admin;
 
 import com.lemutugi.controller.BaseModel;
 import com.lemutugi.model.Role;
-import com.lemutugi.payload.request.PrivilegeRequest;
 import com.lemutugi.payload.request.RoleRequest;
 import com.lemutugi.repository.PrivilegeRepository;
 import com.lemutugi.service.RoleService;

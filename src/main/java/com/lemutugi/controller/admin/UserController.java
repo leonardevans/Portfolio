@@ -1,7 +1,6 @@
 package com.lemutugi.controller.admin;
 
 import com.lemutugi.controller.BaseModel;
-import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.service.UserService;
@@ -37,7 +36,7 @@ public class UserController extends BaseModel {
     public String showUsers(
             @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(defaultValue = "name", required = false) String sortField,
+            @RequestParam(defaultValue = "fName", required = false) String sortField,
             @RequestParam(defaultValue = "asc", required = false) String sortDir ,
             Model model){
 
