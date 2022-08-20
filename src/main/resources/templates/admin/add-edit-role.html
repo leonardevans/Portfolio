@@ -52,8 +52,8 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form id="createProdCatForm" th:object="${roleRequest}" method="post" th:action="@{${roleRequest.getId() == null ? '/admin/roles/add' : '/admin/roles/update'}}">
-                        <input type="hidden" name="id" class="form-control" id="privilegeId" th:field="*{id}">
+                    <form id="createRoleForm" th:object="${roleRequest}" method="post" th:action="@{${roleRequest.getId() == null ? '/admin/roles/add' : '/admin/roles/update'}}">
+                        <input type="hidden" name="id" class="form-control" id="roleId" th:field="*{id}">
 
                         <div class="card-body">
                             <div class="form-group">

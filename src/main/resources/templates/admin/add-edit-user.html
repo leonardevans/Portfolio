@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/admin_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Add/Edit User</title>
+</head>
+<body>
+
+<!-- Content Header (Page header) -->
+<div class="content-header" layout:fragment="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Users</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+                    <li class="breadcrumb-item active">
+                        <a th:href="@{/admin/users/}">Users</a>
+                    </li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+
+        <!--        responses-->
+        <div class="row">
+            <div class=" text-danger" th:if="${param.not_found}">Privilege not found</div>
+            <div class=" text-success" th:if="${param.add_success}">Privilege added successfully</div>
+            <div class=" text-success" th:if="${param.update_success}">Privilege updated successfully</div>
+            <div class=" text-success" th:if="${param.delete_success}">Privilege deleted successfully</div>
+            <div class=" text-danger" th:if="${param.delete_error}">Failed to delete privilege</div>
+        </div>
+        <!--        responses-->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<!-- Main content -->
+<section class="content" layout:fragment="content">
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- jquery validation -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">[[${userDto.getId() == null ? 'Create' : 'Edit'}]] User</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form id="createUserForm" th:object="${userDto}" method="post" th:action="@{${userDto.getId() == null ? '/admin/users/add' : '/admin/users/update'}}">
+                        <input type="hidden" name="id" class="form-control" id="userId" th:field="*{id}">
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="fName">First Name</label>
+                                <input type="text" name="fName" class="form-control" id="fName" placeholder="First Name" th:field="*{fName}">
+                                <small id="fName-error" class="form-text text-danger" th:if="${#fields.hasErrors('fName')}" th:errors="*{fName}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="lName">Last Name</label>
+                                <input type="text" name="lName" class="form-control" id="lName" placeholder="Last Name" th:field="*{lName}">
+                                <small id="lName-error" class="form-text text-danger" th:if="${#fields.hasErrors('lName')}" th:errors="*{lName}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" class="form-control" id="email" placeholder="youremail@host.com" th:field="*{email}">
+                                <small id="email-error" class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" name="username" class="form-control" id="username" placeholder="Username" th:field="*{username}">
+                                <small id="username-error" class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="tagline">Tagline</label>
+                                <input type="text" name="tagline" class="form-control" id="tagline" placeholder="Engineer" th:field="*{tagline}">
+                                <small id="tagline-error" class="form-text text-danger" th:if="${#fields.hasErrors('tagline')}" th:errors="*{tagline}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="provider">Provider</label>
+                                <select id="provider" class="form-control" th:field="*{provider}">
+                                    <option th:each="provider: ${authProviders}" th:text="${provider}" th:value="${provider}"></option>
+                                </select>
+                                <small id="provider-error" class="form-text text-danger" th:if="${#fields.hasErrors('provider')}" th:errors="*{provider}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="providerId">Provider Id</label>
+                                <input type="text" name="tagline" class="form-control" id="providerId" placeholder="Provider Id" th:field="*{providerId}">
+                                <small id="providerId-error" class="form-text text-danger" th:if="${#fields.hasErrors('providerId')}" th:errors="*{providerId}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="whatIDo">What I Do</label>
+                                <textarea name="whatIDo" class="form-control" id="whatIDo" placeholder="What I Do" th:field="*{whatIDo}" rows="3"></textarea>
+                                <small id="whatIDo-error" class="form-text text-danger" th:if="${#fields.hasErrors('whatIDo')}" th:errors="*{whatIDo}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="bio">Bio</label>
+                                <textarea name="bio" class="form-control" id="bio" placeholder="Bio" th:field="*{bio}" rows="3"></textarea>
+                                <small id="bio-error" class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="careerSummary">Career Summary</label>
+                                <textarea name="bio" class="form-control" id="careerSummary" placeholder="Bio" th:field="*{careerSummary}" rows="3"></textarea>
+                                <small id="careerSummary-error" class="form-text text-danger" th:if="${#fields.hasErrors('careerSummary')}" th:errors="*{careerSummary}"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="twitterUrl">Twitter Url</label>
+                                <input type="url" name="twitterUrl" class="form-control" id="twitterUrl" placeholder="Twitter Url" th:field="*{twitterUrl}">
+                                <small id="twitterUrl-error" class="form-text text-danger" th:if="${#fields.hasErrors('twitterUrl')}" th:errors="*{twitterUrl}"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="githubUrl">Github Url</label>
+                                <input type="url" name="githubUrl" class="form-control" id="githubUrl" placeholder="Github Url" th:field="*{githubUrl}">
+                                <small id="githubUrl-error" class="form-text text-danger" th:if="${#fields.hasErrors('githubUrl')}" th:errors="*{githubUrl}"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="linkedInUrl">LinkedIn Url</label>
+                                <input type="url" name="linkedInUrl" class="form-control" id="linkedInUrl" placeholder="LinkedIn Url" th:field="*{linkedInUrl}">
+                                <small id="linkedInUrl-error" class="form-text text-danger" th:if="${#fields.hasErrors('linkedInUrl')}" th:errors="*{linkedInUrl}"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stackoverflowUrl">Stackoverflow Url</label>
+                                <input type="url" name="stackoverflowUrl" class="form-control" id="stackoverflowUrl" placeholder="Stackoverflow Url" th:field="*{stackoverflowUrl}">
+                                <small id="stackoverflowUrl-error" class="form-text text-danger" th:if="${#fields.hasErrors('stackoverflowUrl')}" th:errors="*{stackoverflowUrl}"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="codePenUrl">CodePen Url</label>
+                                <input type="url" name="codePenUrl" class="form-control" id="codePenUrl" placeholder="CodePen Url" th:field="*{codePenUrl}">
+                                <small id="codePenUrl-error" class="form-text text-danger" th:if="${#fields.hasErrors('codePenUrl')}" th:errors="*{codePenUrl}"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="website">Website Url</label>
+                                <input type="url" name="website" class="form-control" id="website" placeholder="Website Url" th:field="*{website}">
+                                <small id="website-error" class="form-text text-danger" th:if="${#fields.hasErrors('website')}" th:errors="*{website}"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="company">Company</label>
+                                <input type="text" name="tagline" class="form-control" id="company" placeholder="Amazon" th:field="*{company}">
+                                <small id="company-error" class="form-text text-danger" th:if="${#fields.hasErrors('company')}" th:errors="*{company}"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mobile">Mobile</label>
+                                <input type="number" name="tagline" class="form-control" id="mobile" placeholder="+254700000000" th:field="*{mobile}">
+                                <small id="mobile-error" class="form-text text-danger" th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}"></small>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input type="checkbox" name="enabled" class="form-check-input" id="enabled"  th:field="*{enabled}" th:text="${'Enabled'}">
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" name="email_verified" class="form-check-input" id="email_verified"  th:field="*{email_verified}" th:text="${'Email Verified'}">
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" name="accountNonExpired" class="form-check-input" id="accountNonExpired"  th:field="*{accountNonExpired}" th:text="${'Account Non Expired'}">
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" name="accountNonLocked" class="form-check-input" id="accountNonLocked"  th:field="*{accountNonLocked}" th:text="${'Account Non Locked'}">
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" name="credentialsNonExpired" class="form-check-input" id="credentialsNonExpired"  th:field="*{credentialsNonExpired}" th:text="${'Credentials Non Expired'}">
+                            </div>
+                            <div class="form-group clearfix">
+                                <label for="userRoles">User Roles</label>
+                                <div class="form-check" id="userRoles" th:each="role : ${allRoles}">
+                                    <input type="checkbox" class="form-check-input" name="roles"
+
+                                           th:text="${role.name}"
+                                           th:value="${role.id}"
+                                           th:field="*{roles}"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">[[${userDto.getId() == null ? 'Create' : 'Update'}]]</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!--/.col (left) -->
+            <!-- right column -->
+            <div class="col-md-6">
+
+            </div>
+            <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+
+
+    <!-- /.content -->
+</section>
+
+</body>
+</html>

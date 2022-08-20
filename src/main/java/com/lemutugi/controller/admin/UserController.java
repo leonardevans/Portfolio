@@ -3,6 +3,7 @@ package com.lemutugi.controller.admin;
 import com.lemutugi.controller.BaseModel;
 import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
+import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.request.RoleRequest;
 import com.lemutugi.repository.RoleRepository;
@@ -57,6 +58,7 @@ public class UserController extends BaseModel {
     public String showAddUser(Model model){
         model.addAttribute("userDto", new UserDto());
         model.addAttribute("allRoles", roleRepository.findAll());
+        model.addAttribute("authProviders" , AuthProvider.values());
         return "/admin/add-edit-user";
     }
 
@@ -66,6 +68,7 @@ public class UserController extends BaseModel {
         UserDto userDto = new UserDto(user);
         model.addAttribute("userDto", userDto);
         model.addAttribute("allRoles", roleRepository.findAll());
+        model.addAttribute("authProviders" , AuthProvider.values());
         return "/admin/add-edit-user";
     }
 
