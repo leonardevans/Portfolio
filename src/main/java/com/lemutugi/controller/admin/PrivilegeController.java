@@ -35,7 +35,6 @@ public class PrivilegeController extends BaseModel {
             @RequestParam(defaultValue = "name", required = false) String sortField,
             @RequestParam(defaultValue = "asc", required = false) String sortDir ,
             Model model){
-
         Page<Privilege> privilegePage = privilegeService.getAllPrivileges(pageNo, pageSize, sortField, sortDir);
         List<Privilege> privileges = privilegePage.getContent();
 

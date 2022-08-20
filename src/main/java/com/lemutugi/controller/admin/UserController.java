@@ -1,7 +1,10 @@
 package com.lemutugi.controller.admin;
 
 import com.lemutugi.controller.BaseModel;
+import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
+import com.lemutugi.payload.dto.UserDto;
+import com.lemutugi.payload.request.RoleRequest;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.service.UserService;
 import com.lemutugi.utils.Constants;
@@ -11,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -47,6 +51,22 @@ public class UserController extends BaseModel {
 
         model.addAttribute("users", users);
         return "/admin/users";
+    }
+
+    @GetMapping("/add")
+    public String showAddUser(Model model){
+        model.addAttribute("userDto", new UserDto());
+        model.addAttribute("allRoles", roleRepository.findAll());
+        return "/admin/add-edit-user";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditUser(@PathVariable("id") Long id, Model model){
+        User user = userService.getUserById(id);
+        UserDto userDto = new UserDto(user);
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("allRoles", roleRepository.findAll());
+        return "/admin/add-edit-user";
     }
 
 }
