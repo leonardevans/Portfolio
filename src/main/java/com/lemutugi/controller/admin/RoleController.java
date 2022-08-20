@@ -1,5 +1,6 @@
 package com.lemutugi.controller.admin;
 
+import com.lemutugi.controller.BaseModel;
 import com.lemutugi.model.Role;
 import com.lemutugi.payload.request.PrivilegeRequest;
 import com.lemutugi.payload.request.RoleRequest;
@@ -22,7 +23,7 @@ import java.util.Optional;
 @RequestMapping("/admin/roles/")
 @RolesAllowed("ROLE_ADMIN")
 @Controller
-public class RoleController {
+public class RoleController extends BaseModel {
     private RoleService roleService;
     private PrivilegeRepository privilegeRepository;
 
@@ -43,14 +44,7 @@ public class RoleController {
         Page<Role> rolePage = roleService.getAllRoles(pageNo, pageSize, sortField, sortDir);
         List<Role> roles = rolePage.getContent();
 
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", rolePage.getTotalPages());
-        model.addAttribute("totalItems", rolePage.getTotalElements());
-
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model = this.addPagingAttributes(model, pageSize, pageNo, rolePage.getTotalPages(), rolePage.getTotalElements(), sortField, sortDir);
 
         model.addAttribute("roles", roles);
         return "/admin/roles";
