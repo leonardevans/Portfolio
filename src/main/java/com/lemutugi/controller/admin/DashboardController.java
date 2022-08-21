@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.security.RolesAllowed;
 
 @RequestMapping("/admin/*")
-@RolesAllowed("ROLE_ADMIN")
+@RolesAllowed({"ROLE_ADMIN", "ROLE_SUPERADMIN", "ROLE_EDITOR"})
 @Controller
 public class DashboardController {
     private UserService userService;

@@ -8,6 +8,7 @@ import com.lemutugi.service.RoleService;
 import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/admin/roles/")
-@RolesAllowed("ROLE_ADMIN")
+@RolesAllowed({"ROLE_ADMIN", "ROLE_SUPERADMIN"})
 @Controller
 public class RoleController extends BaseModel {
     private RoleService roleService;
@@ -49,6 +50,7 @@ public class RoleController extends BaseModel {
         return "/admin/roles";
     }
 
+    @PreAuthorize("hasAuthority('CREATE_ROLE')")
     @GetMapping("/add")
     public String showAddRole(Model model){
         model.addAttribute("roleRequest", new RoleRequest());
@@ -56,6 +58,7 @@ public class RoleController extends BaseModel {
         return "/admin/add-edit-role";
     }
 
+    @PreAuthorize("hasAuthority('EDIT_ROLE')")
     @GetMapping("/edit/{id}")
     public String showEditRole(@PathVariable("id") Long id, Model model){
         Role role = roleService.getRoleById(id);
@@ -65,12 +68,14 @@ public class RoleController extends BaseModel {
         return "/admin/add-edit-role";
     }
 
+    @PreAuthorize("hasAuthority('DELETE_ROLE')")
     @GetMapping("/delete/{id}")
     public String deleteRole(@PathVariable("id") Long id){
         if (roleService.deleteRoleById(id)) return "redirect:/admin/roles/?delete_success";
         return "redirect:/admin/roles/?delete_error";
     }
 
+    @PreAuthorize("hasAuthority('CREATE_ROLE')")
     @PostMapping("/add")
     public String createRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
         if (roleService.existsByName(roleRequest.getName())){
@@ -87,6 +92,7 @@ public class RoleController extends BaseModel {
         return "redirect:/admin/roles/?add_success";
     }
 
+    @PreAuthorize("hasAuthority('EDIT_ROLE')")
     @PostMapping("/update")
     public String updateRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
         Optional<Role> optionalRole = roleService.getRoleByName(roleRequest.getName());

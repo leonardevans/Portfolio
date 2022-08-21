@@ -4,13 +4,12 @@ import com.lemutugi.controller.BaseModel;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.payload.dto.UserDto;
-import com.lemutugi.payload.request.RoleRequest;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.service.UserService;
 import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +21,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/admin/users/")
-@RolesAllowed("ROLE_ADMIN")
+@RolesAllowed({"ROLE_ADMIN", "ROLE_SUPERADMIN"})
 @Controller
 public class UserController extends BaseModel {
     private UserService userService;
@@ -51,6 +50,7 @@ public class UserController extends BaseModel {
         return "/admin/users";
     }
 
+    @PreAuthorize("hasAuthority('CREATE_USER')")
     @GetMapping("/add")
     public String showAddUser(Model model){
         model.addAttribute("userDto", new UserDto());
@@ -59,6 +59,7 @@ public class UserController extends BaseModel {
         return "/admin/add-edit-user";
     }
 
+    @PreAuthorize("hasAuthority('EDIT_USER')")
     @GetMapping("/edit/{id}")
     public String showEditUser(@PathVariable("id") Long id, Model model){
         User user = userService.getUserById(id);
@@ -69,6 +70,7 @@ public class UserController extends BaseModel {
         return "/admin/add-edit-user";
     }
 
+    @PreAuthorize("hasAuthority('CREATE_USER')")
     @PostMapping("/add")
     public String createUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model){
         if(userService.existsByEmail(userDto.getEmail())) {
@@ -94,6 +96,7 @@ public class UserController extends BaseModel {
         return "redirect:/admin/users/?add_success";
     }
 
+    @PreAuthorize("hasAuthority('EDIT_USER')")
     @PostMapping("/update")
     public String updateUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model){
         if(userService.existsByEmailAndIdNot(userDto.getEmail(), userDto.getId())) {
@@ -117,6 +120,13 @@ public class UserController extends BaseModel {
         userService.updateUser(userDto);
 
         return "redirect:/admin/users/?update_success";
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_USER')")
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id){
+        if (userService.deleteUserById(id)) return "redirect:/admin/users/?delete_success";
+        return "redirect:/admin/users/?delete_error";
     }
 
 }
