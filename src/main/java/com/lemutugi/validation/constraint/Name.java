@@ -1,17 +1,17 @@
 package com.lemutugi.validation.constraint;
 
-import com.lemutugi.validation.validator.TaglineValidator;
+import com.lemutugi.validation.validator.NameValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = TaglineValidator.class)
+@Constraint(validatedBy = NameValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Tagline {
-    String message() default "Invalid tagline";
+public @interface Name {
+    String message() default "Invalid name";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
