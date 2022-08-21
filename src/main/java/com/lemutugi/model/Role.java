@@ -22,7 +22,6 @@ public class Role extends Auditable<String> {
     private Collection<User> users;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
-            CascadeType.PERSIST,
             CascadeType.MERGE
     })
     @JoinTable(
