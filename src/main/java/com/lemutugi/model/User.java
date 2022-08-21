@@ -132,4 +132,32 @@ public class User extends Auditable<String>{
         this.providerId = userDto.getProviderId();
         this.roles = userDto.getRoles();
     }
+
+    public void update(UserDto userDto){
+        this.username = userDto.getUsername();
+        this.email = userDto.getEmail();
+        this.enabled = userDto.isEnabled();
+        this.email_verified = userDto.isEmail_verified();
+        this.fName = userDto.getFName();
+        this.lName = userDto.getLName();
+        this.tagline = userDto.getTagline();
+        this.bio = userDto.getBio();
+        this.profilePic = userDto.getProfilePic();
+        this.whatIDo = userDto.getWhatIDo();
+        this.twitterUrl = userDto.getTwitterUrl();
+        this.githubUrl = userDto.getGithubUrl();
+        this.linkedInUrl = userDto.getLinkedInUrl();
+        this.stackoverflowUrl = userDto.getStackoverflowUrl();
+        this.codePenUrl = userDto.getCodePenUrl();
+        this.company = userDto.getCompany();
+        this.website = userDto.getWebsite();
+        this.mobile = userDto.getMobile();
+        this.careerSummary = userDto.getCareerSummary();
+        this.accountNonExpired = userDto.getAccountNonExpired();
+        this.accountNonLocked = userDto.getAccountNonLocked();
+        this.credentialsNonExpired = userDto.getCredentialsNonExpired();
+        this.provider = userDto.getProvider();
+        this.providerId = userDto.getProviderId();
+        this.roles = userDto.getRoles();
+    }
 }

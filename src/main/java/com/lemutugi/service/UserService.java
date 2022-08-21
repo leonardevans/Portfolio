@@ -26,8 +26,16 @@ public interface UserService {
 
     boolean deleteUserById(Long id);
     boolean existsByEmail(String email);
+
+    boolean existsByEmailAndIdNot(String email, Long id);
+
     boolean existsByUsername(String username);
+
+    boolean existsByUsernameAndIdNot(String username, Long id);
+
     boolean existsByMobile(Long mobile);
+
+    boolean existsByMobileAndIdNot(Long mobile, Long id);
 
     User validatePasswordResetToken(String token);
 

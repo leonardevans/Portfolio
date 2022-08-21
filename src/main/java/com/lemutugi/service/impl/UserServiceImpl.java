@@ -83,7 +83,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(UserDto userDto) {
-        return null;
+        User user = userRepository.findById(userDto.getId()).orElseThrow(()-> new NotFoundException("No user found with id: " + userDto.getId()));
+
+        user.update(userDto);
+        return userRepository.save(user);
     }
 
     @Override
@@ -173,13 +176,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean existsByEmailAndIdNot(String email, Long id) {
+        return userRepository.existsByEmailAndIdNot(email, id);
+    }
+
+    @Override
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
     @Override
+    public boolean existsByUsernameAndIdNot(String username, Long id) {
+        return userRepository.existsByUsernameAndIdNot(username, id);
+    }
+
+    @Override
     public boolean existsByMobile(Long mobile) {
         return userRepository.existsByMobile(mobile);
+    }
+
+    @Override
+    public boolean existsByMobileAndIdNot(Long mobile, Long id) {
+        return userRepository.existsByMobileAndIdNot(mobile, id);
     }
 
     @Override

@@ -27,13 +27,11 @@ import java.util.List;
 public class UserController extends BaseModel {
     private UserService userService;
     private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
         this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping(value = {"/list", "/"})
@@ -81,6 +79,10 @@ public class UserController extends BaseModel {
             bindingResult.addError(new FieldError("userDto", "username", "Username already in use."));
         }
 
+        if(userDto.getMobile() != null && userService.existsByMobile(userDto.getMobile())) {
+            bindingResult.addError(new FieldError("userDto", "mobile", "Mobile number is already in use."));
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("allRoles", roleRepository.findAll());
             model.addAttribute("authProviders" , AuthProvider.values());
@@ -90,6 +92,31 @@ public class UserController extends BaseModel {
         userService.createUser(userDto);
 
         return "redirect:/admin/users/?add_success";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model){
+        if(userService.existsByEmailAndIdNot(userDto.getEmail(), userDto.getId())) {
+            bindingResult.addError(new FieldError("userDto", "email", "Email address already in use."));
+        }
+
+        if(userService.existsByUsernameAndIdNot(userDto.getUsername(), userDto.getId())) {
+            bindingResult.addError(new FieldError("userDto", "username", "Username already in use."));
+        }
+
+        if(userDto.getMobile() != null && userService.existsByMobileAndIdNot(userDto.getMobile(), userDto.getId())) {
+            bindingResult.addError(new FieldError("userDto", "mobile", "Mobile number is already in use."));
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allRoles", roleRepository.findAll());
+            model.addAttribute("authProviders" , AuthProvider.values());
+            return "/admin/add-edit-user";
+        }
+
+        userService.updateUser(userDto);
+
+        return "redirect:/admin/users/?update_success";
     }
 
 }
