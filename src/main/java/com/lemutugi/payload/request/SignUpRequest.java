@@ -1,5 +1,6 @@
 package com.lemutugi.payload.request;
 
+import com.lemutugi.validation.constraint.Password;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,20 +13,20 @@ import java.util.Set;
 @NoArgsConstructor
 public class SignUpRequest {
     @NotBlank(message = "First name is required")
-    @Size(min = 3, message = "First name is too short")
-    @Size(max = 35, message = "First name is too long")
+    @Size(min = 3, message = "First name should contain at least 3 characters")
+    @Size(max = 35, message = "First name should not exceed 35 characters")
     @Pattern(regexp = "[a-zA-Z]+", message = "First name should contain only letters")
     private String fName;
 
     @NotBlank(message = "Last name is required")
-    @Size(min = 3, message = "Last name is too short")
-    @Size(max = 35, message = "Last name is too long")
+    @Size(min = 3, message = "Last name should contain at least 3 characters")
+    @Size(max = 35, message = "Last name should not exceed 35 characters")
     @Pattern(regexp = "[a-zA-Z]+", message = "Last name should contain only letters")
     private String lName;
 
     @NotBlank(message = "Username is required")
-    @Size(min = 3, message = "Username is too short")
-    @Size(max = 35, message = "Username is too long")
+    @Size(min = 3, message = "Username should contain at least 3 characters")
+    @Size(max = 35, message = "Username should not exceed 35 characters")
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "Username should contain only letters and numbers. No special characters.")
     private String username;
 
@@ -34,7 +35,8 @@ public class SignUpRequest {
     private String email;
 
     @NotBlank(message = "password is required")
-    @Size(min = 8, max = 30, message = "Please enter a minimum password of 8 characters and maximum 30")
+//    @Size(min = 8, max = 30, message = "Please enter a minimum password of 8 characters and maximum 30")
+    @Password(message = "Please enter a password of minimum 8 characters and maximum 30")
     private String password;
 
     @NotEmpty(message = "please confirm password")

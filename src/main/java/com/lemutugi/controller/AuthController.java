@@ -44,7 +44,6 @@ public class AuthController {
 
         if(userService.existsByEmail(signUpRequest.getEmail())) {
             bindingResult.addError(new FieldError("signUpRequest", "email", "Email address already in use."));
-//            throw new BadRequestException("Email address already in use.");
         }
 
         if(userService.existsByUsername(signUpRequest.getUsername())) {

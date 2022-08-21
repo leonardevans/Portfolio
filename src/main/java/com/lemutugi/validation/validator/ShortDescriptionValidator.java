@@ -14,7 +14,7 @@ public class ShortDescriptionValidator implements ConstraintValidator<ShortDescr
     @Override
     public boolean isValid(String shortDescription, ConstraintValidatorContext constraintValidatorContext) {
         if (shortDescription != null && shortDescription.trim() != ""){
-            return shortDescription.length() >= 50 && shortDescription.length() <= 300;
+            return shortDescription.length() > 49 && shortDescription.length() < 301;
         }
         return true;
     }

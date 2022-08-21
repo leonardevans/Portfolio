@@ -1,7 +1,6 @@
 package com.lemutugi.controller.admin;
 
 import com.lemutugi.controller.BaseModel;
-import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.payload.dto.UserDto;
@@ -14,12 +13,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/admin/users/")
@@ -70,6 +69,27 @@ public class UserController extends BaseModel {
         model.addAttribute("allRoles", roleRepository.findAll());
         model.addAttribute("authProviders" , AuthProvider.values());
         return "/admin/add-edit-user";
+    }
+
+    @PostMapping("/add")
+    public String createUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model){
+        if(userService.existsByEmail(userDto.getEmail())) {
+            bindingResult.addError(new FieldError("userDto", "email", "Email address already in use."));
+        }
+
+        if(userService.existsByUsername(userDto.getUsername())) {
+            bindingResult.addError(new FieldError("userDto", "username", "Username already in use."));
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allRoles", roleRepository.findAll());
+            model.addAttribute("authProviders" , AuthProvider.values());
+            return "/admin/add-edit-user";
+        }
+
+        userService.createUser(userDto);
+
+        return "redirect:/admin/users/?add_success";
     }
 
 }
