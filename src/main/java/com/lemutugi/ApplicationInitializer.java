@@ -1,9 +1,12 @@
 package com.lemutugi;
 
+import com.lemutugi.model.Privilege;
 import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
+import com.lemutugi.model.enums.EPrivilege;
 import com.lemutugi.model.enums.ERole;
+import com.lemutugi.repository.PrivilegeRepository;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -18,12 +24,14 @@ public class ApplicationInitializer  implements CommandLineRunner {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private PrivilegeRepository privilegeRepository;
 
     @Autowired
-    public ApplicationInitializer(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public ApplicationInitializer(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, PrivilegeRepository privilegeRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.privilegeRepository = privilegeRepository;
     }
 
     @Override
@@ -32,15 +40,26 @@ public class ApplicationInitializer  implements CommandLineRunner {
     }
 
     private void loadData(){
-        //check if USER role exists, if not create it and save
-        if (!roleRepository.existsByName(ERole.ROLE_USER.name())){
-            roleRepository.save(new Role(ERole.ROLE_USER.name()));
-        }
+        //create privileges
+        Arrays.stream(EPrivilege.values()).forEach(ePrivilege -> {
+            if (!privilegeRepository.existsByName(ePrivilege.name())){
+                 privilegeRepository.save(new Privilege(ePrivilege.name()));
+            }
+        });
 
-        //check if ADMIN role exists, if not create it and save
-        if (!roleRepository.existsByName(ERole.ROLE_ADMIN.name())){
-            roleRepository.save(new Role(ERole.ROLE_ADMIN.name()));
-        }
+        List<Privilege> privileges = privilegeRepository.findAll();
+        //create roles
+        Arrays.stream(ERole.values()).forEach(eRole -> {
+            if (!roleRepository.existsByName(eRole.name())){
+                if (eRole.equals(ERole.ROLE_SUPERADMIN)){
+                    Role superAdmin = new Role(eRole.name());
+                    superAdmin.getPrivileges().addAll(privileges);
+                    roleRepository.save(superAdmin);
+                }else{
+                    roleRepository.save(new Role(eRole.name()));
+                }
+            }
+        });
 
         try
         {
@@ -64,13 +83,8 @@ public class ApplicationInitializer  implements CommandLineRunner {
             admin.setEmail_verified(true);
             admin.setProvider(AuthProvider.local);
 
-            //            get user role and add this role to admin
-            Optional<Role> userRole = roleRepository.findByName(ERole.ROLE_USER.name());
-            userRole.ifPresent(role -> admin.getRoles().add(role));
-
-//            get admin role and add this role to admin
-            Optional<Role> adminRole = roleRepository.findByName(ERole.ROLE_ADMIN.name());
-            adminRole.ifPresent(role -> admin.getRoles().add(role));
+            List<Role> roles = roleRepository.findAll();
+            admin.getRoles().addAll(roles);
 
 //            save this user
             userRepository.save(admin);
