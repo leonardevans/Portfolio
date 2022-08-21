@@ -13,7 +13,7 @@ public class NameValidator implements ConstraintValidator<Name, String> {
 
     @Override
     public boolean isValid(String tagline, ConstraintValidatorContext constraintValidatorContext) {
-        if (tagline.trim() != null && tagline.trim() != ""){
+        if (tagline != null && tagline.trim() != ""){
             return tagline.length() >= 3 && tagline.length() <= 50;
         }
         return true;
