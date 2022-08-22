@@ -79,9 +79,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getId());
-        user.setUsername(oAuth2UserInfo.getUsername());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setProfilePic(oAuth2UserInfo.getImageUrl());
+        user.setEnabled(true);
+
+        String providerUsername = oAuth2UserInfo.getUsername();
+
+        //set the username
+        String username = providerUsername.replace(" ", "");
+        while (userRepository.existsByUsername(username)){
+            username+= username.charAt(username.length()-1);
+        }
+        user.setUsername(username);
+
+        //set first name and last name
+        String[] names = providerUsername.split(" ", 2);
+        user.setFName(names[0]);
+        if (names.length > 1) user.setLName(names[1]);
 
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByName(ERole.ROLE_USER.name())
@@ -94,8 +108,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setUsername(oAuth2UserInfo.getUsername());
-        existingUser.setProfilePic(oAuth2UserInfo.getImageUrl());
+//        existingUser.setUsername(oAuth2UserInfo.getUsername());
+//        existingUser.setProfilePic(oAuth2UserInfo.getImageUrl());
         return userRepository.save(existingUser);
     }
 }
