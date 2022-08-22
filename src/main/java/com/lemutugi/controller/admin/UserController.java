@@ -39,33 +39,23 @@ public class UserController extends BaseModel {
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(defaultValue = "fName", required = false) String sortField,
             @RequestParam(defaultValue = "asc", required = false) String sortDir ,
+            @RequestParam(required = false) String search,
             Model model){
+        Page<User> userPage = Page.empty();
 
-        Page<User> userPage = userService.getAll(pageNo, pageSize, sortField, sortDir);
+        if (search != null){
+            userPage = userService.searchUserByAllFields(pageNo, pageSize, sortField, sortDir, search);
+            model.addAttribute("search", "&search=" + search);
+        }else{
+            userPage = userService.getAll(pageNo, pageSize, sortField, sortDir);
+            model.addAttribute("search", "");
+        }
+
         List<User> users = userPage.getContent();
 
         model = this.addPagingAttributes(model, pageSize, pageNo, userPage.getTotalPages(), userPage.getTotalElements(), sortField, sortDir);
 
         model.addAttribute("users", users);
-        return "/admin/users";
-    }
-
-    @GetMapping(value = {"/search"})
-    public String searchUsers(
-            @RequestParam(defaultValue = "1", required = false) int pageNo,
-            @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(defaultValue = "fName", required = false) String sortField,
-            @RequestParam(defaultValue = "asc", required = false) String sortDir ,
-            @RequestParam() String search,
-            Model model){
-
-        Page<User> userPage = userService.searchUserByAllFields(pageNo, pageSize, sortField, sortDir, search);
-        List<User> users = userPage.getContent();
-
-        model = this.addPagingAttributes(model, pageSize, pageNo, userPage.getTotalPages(), userPage.getTotalElements(), sortField, sortDir);
-
-        model.addAttribute("users", users);
-        model.addAttribute("search", search);
         return "/admin/users";
     }
 
