@@ -50,6 +50,25 @@ public class UserController extends BaseModel {
         return "/admin/users";
     }
 
+    @GetMapping(value = {"/search"})
+    public String searchUsers(
+            @RequestParam(defaultValue = "1", required = false) int pageNo,
+            @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(defaultValue = "fName", required = false) String sortField,
+            @RequestParam(defaultValue = "asc", required = false) String sortDir ,
+            @RequestParam() String search,
+            Model model){
+
+        Page<User> userPage = userService.searchUserByAllFields(pageNo, pageSize, sortField, sortDir, search);
+        List<User> users = userPage.getContent();
+
+        model = this.addPagingAttributes(model, pageSize, pageNo, userPage.getTotalPages(), userPage.getTotalElements(), sortField, sortDir);
+
+        model.addAttribute("users", users);
+        model.addAttribute("search", search);
+        return "/admin/users";
+    }
+
     @PreAuthorize("hasAuthority('CREATE_USER')")
     @GetMapping("/add")
     public String showAddUser(Model model){

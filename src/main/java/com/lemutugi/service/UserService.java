@@ -11,6 +11,9 @@ import java.util.Optional;
 
 public interface UserService {
     Page<User> getAll(int pageNo, int pageSize, String sortField, String sortDirection);
+
+    Page<User> searchUserByAllFields(int pageNo, int pageSize, String sortField, String sortDirection, String search);
+
     User getUserById(Long id);
     Optional<User> getUserByEmail(String email);
     Optional<User> getUserByUsername(String email);

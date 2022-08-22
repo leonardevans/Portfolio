@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<User> searchUserByAllFields(int pageNo, int pageSize, String sortField, String sortDirection, String search) {
+        return userRepository.search(Pager.createPageable(pageNo, pageSize, sortField, sortDirection), search);
+    }
+
+    @Override
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow( () -> new NotFoundException("No user found with id: " + id));
     }
