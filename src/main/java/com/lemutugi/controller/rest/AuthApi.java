@@ -1,6 +1,7 @@
 package com.lemutugi.controller.rest;
 
 import com.lemutugi.controller.util.HttpUtil;
+import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.LoginRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.payload.response.ApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,7 +39,7 @@ public class AuthApi extends HttpUtil {
     }
 
     @PostMapping("signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequest signUpRequest, BindingResult bindingResult){
+    public ResponseEntity<Object> signup(@Valid @RequestBody SignUpRequest signUpRequest, BindingResult bindingResult){
         bindingResult = this.validateSignUpData(bindingResult, userService, signUpRequest);
 
         ApiResponse apiResponse = null;
@@ -58,7 +60,7 @@ public class AuthApi extends HttpUtil {
     }
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult){
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult){
         ApiResponse apiResponse = null;
 
         if (bindingResult.hasErrors()){
@@ -96,5 +98,26 @@ public class AuthApi extends HttpUtil {
             apiResponse.setErrors(this.getErrors(bindingResult));
             return ResponseEntity.badRequest().body(apiResponse);
         }
+    }
+
+    @PostMapping("forgot-password")
+    public ResponseEntity<ApiResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest, BindingResult bindingResult){
+        ApiResponse apiResponse = null;
+        bindingResult = this.validateForgotPasswordData(bindingResult, userService, forgotPasswordRequest);
+
+        if (bindingResult.hasErrors()){
+            apiResponse = new ApiResponse(false, "Failed to process forgot password. Please provide the correct information.");
+            apiResponse.setErrors(this.getErrors(bindingResult));
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+
+        if (userService.forgotPassword(forgotPasswordRequest)){
+            apiResponse = new ApiResponse(true, "We have sent you am email with instructions to reset your password.");
+            return ResponseEntity.ok().body(apiResponse);
+        }
+
+        apiResponse = new ApiResponse(false, "Failed to email you reset password instructions!");
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 }

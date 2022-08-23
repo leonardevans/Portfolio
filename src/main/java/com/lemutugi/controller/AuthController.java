@@ -59,11 +59,7 @@ public class AuthController extends HttpUtil {
 
     @PostMapping("/forgot-password")
     public String forgotPassword(@Valid @ModelAttribute("forgotPasswordRequest") ForgotPasswordRequest forgotPasswordRequest, BindingResult bindingResult){
-
-        if(!userService.existsByEmail(forgotPasswordRequest.getEmail())) {
-            bindingResult.addError(new FieldError("forgotPasswordRequest", "email", "No account associated with this email."));
-        }
-
+        bindingResult = this.validateForgotPasswordData(bindingResult, userService, forgotPasswordRequest);
 
         if (bindingResult.hasErrors()) return "/auth/forgot-password";
 
