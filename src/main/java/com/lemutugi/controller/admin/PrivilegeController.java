@@ -1,6 +1,6 @@
 package com.lemutugi.controller.admin;
 
-import com.lemutugi.controller.BaseModel;
+import com.lemutugi.controller.HttpUtil;
 import com.lemutugi.model.Privilege;
 import com.lemutugi.payload.request.PrivilegeRequest;
 import com.lemutugi.service.PrivilegeService;
@@ -21,7 +21,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/privileges/")
 @RolesAllowed({"ROLE_ADMIN", "ROLE_SUPERADMIN"})
-public class PrivilegeController extends BaseModel {
+public class PrivilegeController extends HttpUtil {
     private PrivilegeService privilegeService;
 
     @Autowired

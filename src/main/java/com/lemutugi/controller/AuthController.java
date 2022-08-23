@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/auth/*")
-public class AuthController {
+public class AuthController extends HttpUtil{
     private UserService userService;
 
     @Autowired
@@ -38,17 +38,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public String signup(@Valid @ModelAttribute("signUpRequest") SignUpRequest signUpRequest, BindingResult bindingResult){
-        if(!signUpRequest.getConfirmPassword().equals(signUpRequest.getPassword())){
-            bindingResult.addError(new FieldError("signUpRequest", "confirmPassword", "passwords should match."));
-        }
-
-        if(userService.existsByEmail(signUpRequest.getEmail())) {
-            bindingResult.addError(new FieldError("signUpRequest", "email", "Email address already in use."));
-        }
-
-        if(userService.existsByUsername(signUpRequest.getUsername())) {
-            bindingResult.addError(new FieldError("signUpRequest", "username", "Username already in use."));
-        }
+        bindingResult = this.validateSignUpData(bindingResult, userService, signUpRequest);
 
         if (bindingResult.hasErrors()) return "/auth/signup";
 

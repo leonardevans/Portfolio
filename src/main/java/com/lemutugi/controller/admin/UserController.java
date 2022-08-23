@@ -1,6 +1,6 @@
 package com.lemutugi.controller.admin;
 
-import com.lemutugi.controller.BaseModel;
+import com.lemutugi.controller.HttpUtil;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.payload.dto.UserDto;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/admin/users/")
 @RolesAllowed({"ROLE_ADMIN", "ROLE_SUPERADMIN"})
 @Controller
-public class UserController extends BaseModel {
+public class UserController extends HttpUtil {
     private UserService userService;
     private RoleRepository roleRepository;
 
