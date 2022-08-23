@@ -63,7 +63,7 @@ public class AuthController extends HttpUtil {
 
         if (bindingResult.hasErrors()) return "/auth/forgot-password";
 
-        if (userService.forgotPassword(forgotPasswordRequest)){
+        if (userService.forgotPassword(forgotPasswordRequest, "")){
 
             return "redirect:/auth/forgot-password?success";
         }

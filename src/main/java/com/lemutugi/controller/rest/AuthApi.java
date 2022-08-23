@@ -1,6 +1,7 @@
 package com.lemutugi.controller.rest;
 
 import com.lemutugi.controller.util.HttpUtil;
+import com.lemutugi.model.User;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.LoginRequest;
 import com.lemutugi.payload.request.SignUpRequest;
@@ -17,10 +18,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,12 +113,29 @@ public class AuthApi extends HttpUtil {
         }
 
 
-        if (userService.forgotPassword(forgotPasswordRequest)){
+        if (userService.forgotPassword(forgotPasswordRequest, "/api")){
             apiResponse = new ApiResponse(true, "We have sent you am email with instructions to reset your password.");
             return ResponseEntity.ok().body(apiResponse);
         }
 
         apiResponse = new ApiResponse(false, "Failed to email you reset password instructions!");
         return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @GetMapping("password-reset-token")
+    public ResponseEntity<ApiResponse> validateResetToken(@RequestParam("token") String token){
+        ApiResponse apiResponse = null;
+        User user = userService.validatePasswordResetToken(token);
+
+        if (user == null){
+            apiResponse = new ApiResponse(false, "Failed to verify your password reset token. Please request another password reset token in the forgot password page.");
+        }else{
+            apiResponse = new ApiResponse(true, "Password reset token verified.");
+            HashMap<String, String> data = new HashMap<>();
+            data.put("email", user.getEmail());
+            apiResponse.setData(data);
+        }
+
+        return ResponseEntity.ok().body(apiResponse);
     }
 }

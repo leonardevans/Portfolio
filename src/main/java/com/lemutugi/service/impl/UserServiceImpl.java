@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest) {
+    public boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest, String path) {
         try {
             User user = userRepository.findByEmail(forgotPasswordRequest.getEmail()).get();
 
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
             mailMessage.setSubject("Complete Password Reset!");
             mailMessage.setFrom(notificationsFrom);
             mailMessage.setText("To complete the password reset process, please click here: "
-                    + BASE_URL +"/auth/password-reset-token?token=" + token.getToken());
+                    + BASE_URL + path + "/auth/password-reset-token?token=" + token.getToken());
 
             // Send the email
             emailSenderService.sendEmail(mailMessage);

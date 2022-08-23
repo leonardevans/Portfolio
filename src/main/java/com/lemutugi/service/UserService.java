@@ -25,7 +25,7 @@ public interface UserService {
 
     boolean registerUser(SignUpRequest signUpRequest);
 
-    boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
+    boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest, String path);
 
     boolean deleteUserById(Long id);
     boolean existsByEmail(String email);
