@@ -39,9 +39,19 @@ public class RoleController extends BaseModel {
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(defaultValue = "name", required = false) String sortField,
             @RequestParam(defaultValue = "asc", required = false) String sortDir ,
+            @RequestParam(required = false) String search,
             Model model){
 
-        Page<Role> rolePage = roleService.getAllRoles(pageNo, pageSize, sortField, sortDir);
+        Page<Role> rolePage = Page.empty();
+
+        if (search != null){
+            rolePage = roleService.search(pageNo, pageSize, sortField, sortDir, search);
+            model.addAttribute("search", "&search=" + search);
+        }else{
+            rolePage = roleService.getAllRoles(pageNo, pageSize, sortField, sortDir);
+            model.addAttribute("search", "");
+        }
+
         List<Role> roles = rolePage.getContent();
 
         model = this.addPagingAttributes(model, pageSize, pageNo, rolePage.getTotalPages(), rolePage.getTotalElements(), sortField, sortDir);

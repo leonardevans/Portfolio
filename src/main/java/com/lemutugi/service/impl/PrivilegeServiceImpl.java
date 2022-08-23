@@ -27,6 +27,11 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
+    public Page<Privilege> search(int pageNo, int pageSize, String sortField, String sortDirection, String search) {
+        return privilegeRepository.searchByName(Pager.createPageable(pageNo, pageSize, sortField, sortDirection), search);
+    }
+
+    @Override
     public Page<Privilege> getPrivilegesByRole(Long roleId, int pageNo, int pageSize, String sortField, String sortDirection) {
         return privilegeRepository.findByRoleId(roleId, Pager.createPageable(pageNo, pageSize, sortField, sortDirection));
     }

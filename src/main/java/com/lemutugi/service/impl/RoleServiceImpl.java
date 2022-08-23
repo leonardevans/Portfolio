@@ -27,6 +27,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public Page<Role> search(int pageNo, int pageSize, String sortField, String sortDirection, String search) {
+        return roleRepository.searchByName(Pager.createPageable(pageNo, pageSize, sortField, sortDirection), search);
+    }
+
+    @Override
     public Role getRoleById(Long id) {
         return roleRepository.findById(id).orElseThrow(() -> new NotFoundException("No role found with id: " + id));
     }

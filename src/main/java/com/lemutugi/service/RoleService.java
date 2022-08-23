@@ -8,6 +8,9 @@ import java.util.Optional;
 
 public interface RoleService {
     Page<Role> getAllRoles(int pageNo, int pageSize, String sortField, String sortDirection);
+
+    Page<Role> search(int pageNo, int pageSize, String sortField, String sortDirection, String search);
+
     Role getRoleById(Long id);
 
     boolean existsByName(String name);

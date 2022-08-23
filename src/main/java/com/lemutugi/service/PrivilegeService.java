@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface PrivilegeService {
     Page<Privilege> getAllPrivileges(int pageNo, int pageSize, String sortField, String sortDirection);
 
+    Page<Privilege> search(int pageNo, int pageSize, String sortField, String sortDirection, String search);
+
     Page<Privilege> getPrivilegesByRole(Long roleId, int pageNo, int pageSize, String sortField, String sortDirection);
 
     Privilege getPrivilegeById(Long id);
