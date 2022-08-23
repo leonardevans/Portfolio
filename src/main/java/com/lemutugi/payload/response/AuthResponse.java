@@ -12,12 +12,14 @@ import java.util.List;
 public class AuthResponse {
     private String token;
     private final String tokenType = "Bearer";
-    private Integer id;
+    private Long id;
     private String userName;
     private String email;
     private List<String> roles;
+    private boolean success;
+    private String message;
 
-    public AuthResponse(String token, Integer id, String userName, String email, List<String> roles) {
+    public AuthResponse(String token, Long id, String userName, String email, List<String> roles) {
         this.token = token;
         this.id = id;
         this.userName = userName;

@@ -1,6 +1,6 @@
 package com.lemutugi.controller.admin;
 
-import com.lemutugi.controller.HttpUtil;
+import com.lemutugi.controller.util.HttpUtil;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.payload.dto.UserDto;

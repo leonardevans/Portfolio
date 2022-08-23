@@ -1,6 +1,6 @@
 package com.lemutugi.controller.admin;
 
-import com.lemutugi.controller.HttpUtil;
+import com.lemutugi.controller.util.HttpUtil;
 import com.lemutugi.model.Privilege;
 import com.lemutugi.payload.request.PrivilegeRequest;
 import com.lemutugi.service.PrivilegeService;

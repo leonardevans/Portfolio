@@ -1,4 +1,4 @@
-package com.lemutugi.controller;
+package com.lemutugi.controller.util;
 
 import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.service.UserService;

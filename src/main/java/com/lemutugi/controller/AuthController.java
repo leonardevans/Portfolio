@@ -1,5 +1,6 @@
 package com.lemutugi.controller;
 
+import com.lemutugi.controller.util.HttpUtil;
 import com.lemutugi.model.User;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.ResetPasswordRequest;
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/auth/*")
-public class AuthController extends HttpUtil{
+public class AuthController extends HttpUtil {
     private UserService userService;
 
     @Autowired
