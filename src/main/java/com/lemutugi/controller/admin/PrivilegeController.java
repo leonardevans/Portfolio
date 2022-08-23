@@ -35,8 +35,17 @@ public class PrivilegeController extends BaseModel {
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(defaultValue = "name", required = false) String sortField,
             @RequestParam(defaultValue = "asc", required = false) String sortDir ,
+            @RequestParam(required = false) String search,
             Model model){
-        Page<Privilege> privilegePage = privilegeService.getAllPrivileges(pageNo, pageSize, sortField, sortDir);
+        Page<Privilege> privilegePage = Page.empty();
+
+        if (search != null){
+            privilegePage = privilegeService.search(pageNo, pageSize, sortField, sortDir, search);
+            model.addAttribute("search", "&search=" + search);
+        }else{
+            privilegePage = privilegeService.getAllPrivileges(pageNo, pageSize, sortField, sortDir);
+            model.addAttribute("search", "");
+        }
         List<Privilege> privileges = privilegePage.getContent();
 
         model = this.addPagingAttributes(model, pageSize, pageNo, privilegePage.getTotalPages(), privilegePage.getTotalElements(), sortField, sortDir);

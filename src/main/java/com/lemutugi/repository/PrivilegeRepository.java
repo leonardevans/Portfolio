@@ -18,6 +18,7 @@ public interface PrivilegeRepository extends JpaRepository<Privilege, Long> {
     @Query(value = "SELECT * FROM privilege INNER jOIN roles_privileges ON roles_privileges.role_id = ?1 ", nativeQuery = true)
     Page<Privilege> findByRoleId(@Param("roleId") Long roleId, Pageable pageable);
 
+    @Query(value = "SELECT p FROM Privilege p WHERE p.name LIKE %?1%", nativeQuery = false)
     Page<Privilege> searchByName(Pageable pageable, String search);
 
 }
