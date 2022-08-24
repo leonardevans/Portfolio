@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +54,7 @@ public class AuthApi extends HttpUtil {
             return ResponseEntity.badRequest().body(apiResponse);
         }
 
-        if (userService.registerUser(signUpRequest)){
+        if (userService.registerUser(signUpRequest, "/api")){
             apiResponse = new ApiResponse(true, "Account created successfully. You can login with your credentials");
             return ResponseEntity.ok().body(apiResponse);
         }
@@ -160,5 +161,18 @@ public class AuthApi extends HttpUtil {
 
         apiResponse = new ApiResponse(false, "Failed to email you reset password instructions!");
         return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @GetMapping("verify-email")
+    public ResponseEntity<ApiResponse> validateEmailToken(@RequestParam("token") String token){
+        ApiResponse apiResponse = null;
+
+        if (userService.validateEmailToken(token)) {
+            apiResponse = new ApiResponse(true, "You have successfully verified your email address.");
+            return ResponseEntity.ok().body(apiResponse);
+        }else{
+            apiResponse = new ApiResponse(false, "Failed to verify your email address. Please contact us if this problem persists.");
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
     }
 }

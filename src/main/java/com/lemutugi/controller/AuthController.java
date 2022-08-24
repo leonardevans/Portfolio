@@ -43,7 +43,7 @@ public class AuthController extends HttpUtil {
 
         if (bindingResult.hasErrors()) return "/auth/signup";
 
-        if (userService.registerUser(signUpRequest)){
+        if (userService.registerUser(signUpRequest, "")){
 
             return "redirect:/auth/signup?success";
         }
@@ -110,7 +110,7 @@ public class AuthController extends HttpUtil {
         if (userService.validateEmailToken(token)) {
             model.addAttribute("successMessage", "You have successfully verified your email address.");
         }else{
-            model.addAttribute("errorMessage", "Failed to verify your email address. Please contact us if this problem persists");
+            model.addAttribute("errorMessage", "Failed to verify your email address. Please contact us if this problem persists.");
         }
 
         return "/auth/verify-token-message";

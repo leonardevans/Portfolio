@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registerUser(SignUpRequest signUpRequest) {
+    public boolean registerUser(SignUpRequest signUpRequest, String path) {
         try {
             User user = new User(signUpRequest, passwordEncoder.encode(signUpRequest.getPassword()), true, false, AuthProvider.local);
 
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
             mailMessage.setSubject("Verify Email!");
             mailMessage.setFrom(notificationsFrom);
             mailMessage.setText("To verify your email, please click here: "
-                    + BASE_URL +"/auth/verify-email?token=" + token.getToken());
+                    + BASE_URL + path + "/auth/verify-email?token=" + token.getToken());
 
             // Send the email
             emailSenderService.sendEmail(mailMessage);
