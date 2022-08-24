@@ -19,7 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableConfigurationProperties(AppProperties.class)
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @OpenAPIDefinition(info = @Info(title = "Lemutugi API", version = "2.0", description = "Lemutugi Rest API Documentation"))
-@SecurityScheme(name = "lemutugi-api", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "lemutugi-api", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class Lemutugi {
     @Bean
     public AuditorAware<String> auditorAware(){
