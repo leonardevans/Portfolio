@@ -26,8 +26,8 @@ public class HttpUtil {
 
     public Map<String, String> getErrors(BindingResult bindingResult){
         Map<String, String> errors = new HashMap<>();
-        bindingResult.getAllErrors().forEach((error) ->{
 
+        bindingResult.getAllErrors().forEach((error) ->{
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
             errors.put(fieldName, message);

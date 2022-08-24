@@ -5,15 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.validation.ObjectError;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class ApiResponse {
+    private LocalDateTime timestamp = LocalDateTime.now();
     private boolean success;
     private String message;
     private Map<String , ?> data = new HashMap<>();

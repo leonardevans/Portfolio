@@ -7,10 +7,7 @@ import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.HashMap;
@@ -58,6 +55,17 @@ public class PrivilegeApi {
         data.put("sortDir", sortDir);
 
         ApiResponse apiResponse = new ApiResponse(true, "Privileges fetched successfully");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @GetMapping("{id}")
+    ResponseEntity<ApiResponse> getPrivilege(@PathVariable("id") Long id){
+        Privilege privilege = privilegeService.getPrivilegeById(id);
+        Map<String, Object> data = new HashMap<>();
+        data.put("privilege", privilege);
+        ApiResponse apiResponse = new ApiResponse(true, "Privilege fetched successfully");
+        apiResponse.setData(data);
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
     }
