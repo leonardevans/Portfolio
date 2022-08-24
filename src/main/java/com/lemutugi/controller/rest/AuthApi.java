@@ -4,6 +4,7 @@ import com.lemutugi.controller.util.HttpUtil;
 import com.lemutugi.model.User;
 import com.lemutugi.payload.request.ForgotPasswordRequest;
 import com.lemutugi.payload.request.LoginRequest;
+import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.payload.response.ApiResponse;
 import com.lemutugi.payload.response.AuthResponse;
@@ -18,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -88,6 +90,7 @@ public class AuthApi extends HttpUtil {
             List<String> roles = userPrincipal.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
+
             AuthResponse authResponse = new AuthResponse(token, userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getEmail(), roles );
             authResponse.setSuccess(true);
             authResponse.setMessage("You have logged in successfully.");
@@ -137,5 +140,25 @@ public class AuthApi extends HttpUtil {
         }
 
         return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PostMapping("reset-password")
+    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest, BindingResult bindingResult){
+        ApiResponse apiResponse = null;
+        bindingResult = this.validateResetPasswordData(bindingResult, userService, resetPasswordRequest);
+
+        if (bindingResult.hasErrors()) {
+            apiResponse = new ApiResponse(false, "Failed to reset your password! Please provide correct information.");
+            apiResponse.setErrors(this.getErrors(bindingResult));
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        if (userService.resetPassword(resetPasswordRequest)){
+            apiResponse = new ApiResponse(true, "You've successfully reset your password. You can now Login with your credentials!");
+            return ResponseEntity.ok().body(apiResponse);
+        }
+
+        apiResponse = new ApiResponse(false, "Failed to email you reset password instructions!");
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 }

@@ -1,6 +1,7 @@
 package com.lemutugi.controller.util;
 
 import com.lemutugi.payload.request.ForgotPasswordRequest;
+import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
 import com.lemutugi.service.UserService;
 import org.springframework.ui.Model;
@@ -54,6 +55,18 @@ public class HttpUtil {
     public BindingResult validateForgotPasswordData(BindingResult bindingResult, UserService userService, ForgotPasswordRequest forgotPasswordRequest){
         if(!bindingResult.hasErrors() && !userService.existsByEmail(forgotPasswordRequest.getEmail())) {
             bindingResult.addError(new FieldError("forgotPasswordRequest", "email", "No account associated with this email."));
+        }
+
+        return bindingResult;
+    }
+
+    public BindingResult validateResetPasswordData(BindingResult bindingResult, UserService userService, ResetPasswordRequest resetPasswordRequest){
+        if(!resetPasswordRequest.getConfirmPassword().equals(resetPasswordRequest.getPassword())){
+            bindingResult.addError(new FieldError("resetPasswordRequest", "confirmPassword", "passwords should match."));
+        }
+
+        if(!bindingResult.hasErrors() && !userService.existsByEmail(resetPasswordRequest.getEmail())) {
+            bindingResult.addError(new FieldError("resetPasswordRequest", "email", "This email does not exist."));
         }
 
         return bindingResult;
