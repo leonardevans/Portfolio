@@ -33,7 +33,7 @@ public class UserController extends HttpUtil {
         this.roleRepository = roleRepository;
     }
 
-    @GetMapping(value = {"/list", "/"})
+    @GetMapping
     public String showUsers(
             @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
@@ -60,7 +60,7 @@ public class UserController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('CREATE_USER')")
-    @GetMapping("/add")
+    @GetMapping("add")
     public String showAddUser(Model model){
         model.addAttribute("userDto", new UserDto());
         model.addAttribute("allRoles", roleRepository.findAll());
@@ -69,7 +69,7 @@ public class UserController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('EDIT_USER')")
-    @GetMapping("/edit/{id}")
+    @GetMapping("edit/{id}")
     public String showEditUser(@PathVariable("id") Long id, Model model){
         User user = userService.getUserById(id);
         UserDto userDto = new UserDto(user);
@@ -80,7 +80,7 @@ public class UserController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('CREATE_USER')")
-    @PostMapping("/add")
+    @PostMapping("add")
     public String createUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model){
         if(userService.existsByEmail(userDto.getEmail())) {
             bindingResult.addError(new FieldError("userDto", "email", "Email address already in use."));
@@ -106,7 +106,7 @@ public class UserController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('EDIT_USER')")
-    @PostMapping("/update")
+    @PostMapping("update")
     public String updateUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model){
         if(userService.existsByEmailAndIdNot(userDto.getEmail(), userDto.getId())) {
             bindingResult.addError(new FieldError("userDto", "email", "Email address already in use."));
@@ -132,7 +132,7 @@ public class UserController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('DELETE_USER')")
-    @GetMapping("/delete/{id}")
+    @GetMapping("delete/{id}")
     public String deleteUser(@PathVariable("id") Long id){
         if (userService.deleteUserById(id)) return "redirect:/admin/users/?delete_success";
         return "redirect:/admin/users/?delete_error";

@@ -7,7 +7,6 @@ import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +28,7 @@ public class PrivilegeApi {
         this.privilegeService = privilegeService;
     }
 
-    @GetMapping(value = {"/list", "/"})
+    @GetMapping
     public ResponseEntity<ApiResponse> showPrivileges(
             @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,

@@ -29,7 +29,7 @@ public class PrivilegeController extends HttpUtil {
         this.privilegeService = privilegeService;
     }
 
-    @GetMapping(value = {"/list", "/"})
+    @GetMapping
     public String showPrivileges(
             @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
@@ -55,14 +55,14 @@ public class PrivilegeController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('CREATE_PRIVILEGE')")
-    @GetMapping("/add")
+    @GetMapping("add")
     public String showAddPrivilege(Model model){
         model.addAttribute("privilegeRequest", new PrivilegeRequest());
         return "/admin/add-edit-privilege";
     }
 
     @PreAuthorize("hasAuthority('EDIT_PRIVILEGE')")
-    @GetMapping("/edit/{id}")
+    @GetMapping("edit/{id}")
     public String showEditPrivilege(@PathVariable("id") Long id, Model model){
         Privilege privilege = privilegeService.getPrivilegeById(id);
         PrivilegeRequest privilegeRequest = new PrivilegeRequest(privilege);
@@ -71,14 +71,14 @@ public class PrivilegeController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('DELETE_PRIVILEGE')")
-    @GetMapping("/delete/{id}")
+    @GetMapping("delete/{id}")
     public String deletePrivilege(@PathVariable("id") Long id){
         if (privilegeService.deletePrivilegeById(id)) return "redirect:/admin/privileges/?delete_success";
         return "redirect:/admin/privileges/?delete_error";
     }
 
     @PreAuthorize("hasAuthority('CREATE_PRIVILEGE')")
-    @PostMapping("/add")
+    @PostMapping("add")
     public String createPrivilege(@Valid @ModelAttribute("privilegeRequest") PrivilegeRequest privilegeRequest, BindingResult bindingResult){
         if (privilegeService.existsByName(privilegeRequest.getName())){
             bindingResult.addError(new FieldError("privilegeRequest", "name", "A privilege with this name already exist."));
@@ -92,7 +92,7 @@ public class PrivilegeController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('EDIT_PRIVILEGE')")
-    @PostMapping("/update")
+    @PostMapping("update")
     public String updatePrivilege(@Valid @ModelAttribute("privilegeRequest") PrivilegeRequest privilegeRequest, BindingResult bindingResult){
         if (bindingResult.hasErrors()) return "/admin/add-edit-privilege";
 

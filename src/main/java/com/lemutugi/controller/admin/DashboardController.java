@@ -28,7 +28,7 @@ public class DashboardController {
         this.privilegeService = privilegeService;
     }
 
-    @GetMapping(value = {"/dashboard", "/", "/home"})
+    @GetMapping
     public String showDashboard(Model model) {
         DashboardRequest dashboardRequest = new DashboardRequest(userService.getTotalUsers(), roleService.getTotalRoles(), privilegeService.getTotalPrivileges());
         model.addAttribute("dashboardRequest", dashboardRequest);

@@ -33,7 +33,7 @@ public class RoleController extends HttpUtil {
         this.privilegeRepository = privilegeRepository;
     }
 
-    @GetMapping(value = {"/list", "/"})
+    @GetMapping
     public String showRoles(
             @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
@@ -61,7 +61,7 @@ public class RoleController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('CREATE_ROLE')")
-    @GetMapping("/add")
+    @GetMapping("add")
     public String showAddRole(Model model){
         model.addAttribute("roleRequest", new RoleRequest());
         model.addAttribute("allPrivileges", privilegeRepository.findAll());
@@ -69,7 +69,7 @@ public class RoleController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('EDIT_ROLE')")
-    @GetMapping("/edit/{id}")
+    @GetMapping("edit/{id}")
     public String showEditRole(@PathVariable("id") Long id, Model model){
         Role role = roleService.getRoleById(id);
         RoleRequest roleRequest = new RoleRequest(role);
@@ -79,14 +79,14 @@ public class RoleController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('DELETE_ROLE')")
-    @GetMapping("/delete/{id}")
+    @GetMapping("delete/{id}")
     public String deleteRole(@PathVariable("id") Long id){
         if (roleService.deleteRoleById(id)) return "redirect:/admin/roles/?delete_success";
         return "redirect:/admin/roles/?delete_error";
     }
 
     @PreAuthorize("hasAuthority('CREATE_ROLE')")
-    @PostMapping("/add")
+    @PostMapping("add")
     public String createRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
         if (roleService.existsByName(roleRequest.getName())){
             bindingResult.addError(new FieldError("roleRequest", "name", "A role with this name already exist."));
@@ -103,7 +103,7 @@ public class RoleController extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('EDIT_ROLE')")
-    @PostMapping("/update")
+    @PostMapping("update")
     public String updateRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
         Optional<Role> optionalRole = roleService.getRoleByName(roleRequest.getName());
 

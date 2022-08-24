@@ -30,7 +30,7 @@ public class DashboardApi {
         this.privilegeService = privilegeService;
     }
 
-    @GetMapping(value = {"/dashboard", "/", "/home"})
+    @GetMapping
     public ResponseEntity<ApiResponse> showDashboard() {
         DashboardRequest dashboardRequest = new DashboardRequest(userService.getTotalUsers(), roleService.getTotalRoles(), privilegeService.getTotalPrivileges());
 
