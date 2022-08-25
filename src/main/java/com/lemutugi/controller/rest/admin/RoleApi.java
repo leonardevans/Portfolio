@@ -9,6 +9,7 @@ import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -64,5 +65,17 @@ public class RoleApi extends HttpUtil {
         ApiResponse apiResponse = new ApiResponse(true, "Role fetched successfully.");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_ROLE')")
+    @DeleteMapping("{id}")
+    public ResponseEntity<ApiResponse> deleteRole(@PathVariable("id") Long id){
+        ApiResponse apiResponse = null;
+        if (roleService.deleteRoleById(id)){
+            apiResponse = new ApiResponse(true, "Role deleted successfully.");
+            return ResponseEntity.ok().body(apiResponse);
+        }
+        apiResponse = new ApiResponse(false, "Failed to delete role!");
+        return ResponseEntity.internalServerError().body(apiResponse);
     }
 }

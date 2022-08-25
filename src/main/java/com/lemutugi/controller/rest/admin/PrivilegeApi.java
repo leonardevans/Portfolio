@@ -71,11 +71,12 @@ public class PrivilegeApi extends HttpUtil {
     @PreAuthorize("hasAuthority('DELETE_PRIVILEGE')")
     @DeleteMapping("{id}")
     public ResponseEntity<ApiResponse> deletePrivilege(@PathVariable("id") Long id){
+        ApiResponse apiResponse = null;
         if (privilegeService.deletePrivilegeById(id)){
-            ApiResponse apiResponse = new ApiResponse(true, "Privilege deleted successfully.");
+            apiResponse = new ApiResponse(true, "Privilege deleted successfully.");
             return ResponseEntity.ok().body(apiResponse);
         }
-        ApiResponse apiResponse = new ApiResponse(false, "Failed to delete privilege!");
+        apiResponse = new ApiResponse(false, "Failed to delete privilege!");
         return ResponseEntity.internalServerError().body(apiResponse);
     }
 
