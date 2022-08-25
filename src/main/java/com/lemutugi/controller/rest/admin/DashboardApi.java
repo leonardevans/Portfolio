@@ -1,4 +1,4 @@
-package com.lemutugi.controller.rest;
+package com.lemutugi.controller.rest.admin;
 
 import com.lemutugi.payload.request.DashboardRequest;
 import com.lemutugi.payload.response.ApiResponse;

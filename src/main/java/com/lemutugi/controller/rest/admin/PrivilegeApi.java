@@ -1,4 +1,4 @@
-package com.lemutugi.controller.rest;
+package com.lemutugi.controller.rest.admin;
 
 import com.lemutugi.model.Privilege;
 import com.lemutugi.payload.response.ApiResponse;
@@ -7,6 +7,7 @@ import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -26,7 +27,7 @@ public class PrivilegeApi {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> showPrivileges(
+    public ResponseEntity<ApiResponse> getPrivileges(
             @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = Constants.SMALL_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(defaultValue = "name", required = false) String sortField,
@@ -64,9 +65,19 @@ public class PrivilegeApi {
         Privilege privilege = privilegeService.getPrivilegeById(id);
         Map<String, Object> data = new HashMap<>();
         data.put("privilege", privilege);
-        ApiResponse apiResponse = new ApiResponse(true, "Privilege fetched successfully");
-        apiResponse.setData(data);
+        ApiResponse apiResponse = new ApiResponse(true, "Privilege fetched successfully.");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_PRIVILEGE')")
+    @DeleteMapping("{id}")
+    ResponseEntity<ApiResponse> deletePrivilege(@PathVariable("id") Long id){
+        if (privilegeService.deletePrivilegeById(id)){
+            ApiResponse apiResponse = new ApiResponse(true, "Privilege deleted successfully.");
+            return ResponseEntity.ok().body(apiResponse);
+        }
+        ApiResponse apiResponse = new ApiResponse(false, "Failed to delete privilege!");
+        return ResponseEntity.internalServerError().body(apiResponse);
     }
 }
