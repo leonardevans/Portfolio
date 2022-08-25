@@ -103,7 +103,7 @@ public class RoleController extends HttpUtil {
     @PreAuthorize("hasAuthority('EDIT_ROLE')")
     @PostMapping("update")
     public String updateRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
-        bindingResult = this.validateCreateRoleData(bindingResult, roleService, roleRequest);
+        bindingResult = this.validateUpdateRoleData(bindingResult, roleService, roleRequest);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("allPrivileges", privilegeRepository.findAll());

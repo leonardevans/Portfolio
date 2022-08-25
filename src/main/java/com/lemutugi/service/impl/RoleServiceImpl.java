@@ -1,8 +1,10 @@
 package com.lemutugi.service.impl;
 
 import com.lemutugi.exceptions.NotFoundException;
+import com.lemutugi.model.Privilege;
 import com.lemutugi.model.Role;
 import com.lemutugi.payload.request.RoleRequest;
+import com.lemutugi.repository.PrivilegeRepository;
 import com.lemutugi.repository.RoleRepository;
 import com.lemutugi.service.RoleService;
 import com.lemutugi.utils.Pager;
@@ -10,15 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
+    private PrivilegeRepository privilegeRepository;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository, PrivilegeRepository privilegeRepository) {
         this.roleRepository = roleRepository;
+        this.privilegeRepository = privilegeRepository;
     }
 
     @Override
@@ -49,7 +55,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role createRole(RoleRequest roleRequest) {
         Role role = new Role(roleRequest);
-        return roleRepository.save(role);
+
+        //prevent updating privileges
+        return saveRole(roleRequest, role);
     }
 
     @Override
@@ -57,7 +65,18 @@ public class RoleServiceImpl implements RoleService {
 
         Role role = roleRepository.findById(roleRequest.getId()).orElseThrow(() -> new NotFoundException("No role found with id: " + roleRequest.getId()));
         role.setName(roleRequest.getName());
-        role.setPrivileges(roleRequest.getPrivileges());
+
+        //prevent updating privileges
+        return saveRole(roleRequest, role);
+    }
+
+    private Role saveRole(RoleRequest roleRequest, Role role) {
+        List<Privilege> privileges = new ArrayList<>();
+        roleRequest.getPrivileges().forEach(privilege -> {
+            privileges.add(privilegeRepository.findById(privilege.getId()).orElseThrow(() -> new NotFoundException("No privilege found with id: " + privilege.getId())));
+        });
+
+        role.setPrivileges(privileges);
         return roleRepository.save(role);
     }
 

@@ -1,7 +1,6 @@
 package com.lemutugi.controller.rest.admin;
 
 import com.lemutugi.controller.util.HttpUtil;
-import com.lemutugi.model.Privilege;
 import com.lemutugi.model.Role;
 import com.lemutugi.payload.request.RoleRequest;
 import com.lemutugi.payload.response.ApiResponse;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,7 +83,7 @@ public class RoleApi extends HttpUtil {
 
     @PreAuthorize("hasAuthority('CREATE_ROLE')")
     @PostMapping("add")
-    public ResponseEntity<ApiResponse> createRole(@Valid @RequestBody RoleRequest roleRequest, BindingResult bindingResult, Model model){
+    public ResponseEntity<ApiResponse> createRole(@Valid @RequestBody RoleRequest roleRequest, BindingResult bindingResult){
         bindingResult = this.validateCreateRoleData(bindingResult, roleService, roleRequest);
 
         ApiResponse apiResponse = null;
@@ -101,6 +99,28 @@ public class RoleApi extends HttpUtil {
         data.put("role", role);
 
         apiResponse = new ApiResponse(true, "Role created successfully.");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PreAuthorize("hasAuthority('EDIT_ROLE')")
+    @PutMapping
+    public ResponseEntity<ApiResponse> updateRole(@Valid @RequestBody RoleRequest roleRequest, BindingResult bindingResult){
+        bindingResult = this.validateUpdateRoleData(bindingResult, roleService, roleRequest);
+
+        ApiResponse apiResponse = null;
+
+        if (bindingResult.hasErrors()) {
+            apiResponse = new ApiResponse(false, "Failed to update role. Please provide correct information.");
+            apiResponse.setErrors(this.getErrors(bindingResult));
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        Role role = roleService.updateRole(roleRequest);
+        data.put("role", role);
+
+        apiResponse = new ApiResponse(true, "Role updated successfully.");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
     }
