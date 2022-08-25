@@ -93,10 +93,6 @@ public class PrivilegeApi extends HttpUtil {
 
         ApiResponse apiResponse = null;
 
-        if (privilegeService.existsByName(privilegeRequest.getName())){
-            bindingResult.addError(new FieldError("privilegeRequest", "name", "A privilege with this name already exist."));
-        }
-
         if (bindingResult.hasErrors()){
             apiResponse = new ApiResponse(false, "Failed to create privilege. Please provide correct information.");
             apiResponse.setErrors(this.getErrors(bindingResult));
@@ -108,6 +104,28 @@ public class PrivilegeApi extends HttpUtil {
         data.put("privilege", privilege);
 
         apiResponse = new ApiResponse(true, "Privilege created successfully.");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PreAuthorize("hasAuthority('EDIT_PRIVILEGE')")
+    @PostMapping("update")
+    public ResponseEntity<ApiResponse> updatePrivilege(@Valid @RequestBody PrivilegeRequest privilegeRequest, BindingResult bindingResult){
+        bindingResult = this.validateUpdatePrivilegeData(bindingResult, privilegeService, privilegeRequest);
+
+        ApiResponse apiResponse = null;
+
+        if (bindingResult.hasErrors()){
+            apiResponse = new ApiResponse(false, "Failed to update privilege. Please provide correct information.");
+            apiResponse.setErrors(this.getErrors(bindingResult));
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        Privilege privilege = privilegeService.updatePrivilege(privilegeRequest);
+        data.put("privilege", privilege);
+
+        apiResponse = new ApiResponse(true, "Privilege updated successfully.");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
     }

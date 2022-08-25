@@ -58,10 +58,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Override
     public Privilege updatePrivilege(PrivilegeRequest privilegeRequest) {
-        Optional<Privilege> optionalPrivilege = privilegeRepository.findByName(privilegeRequest.getName());
-
-        if (optionalPrivilege.isPresent()) return optionalPrivilege.get();
-
         Privilege privilege = privilegeRepository.findById(privilegeRequest.getId()).orElseThrow(() -> new NotFoundException("No privilege found with id: " + privilegeRequest.getId()));
         privilege.setName(privilegeRequest.getName());
         return privilegeRepository.save(privilege);

@@ -92,9 +92,7 @@ public class PrivilegeController extends HttpUtil {
     @PreAuthorize("hasAuthority('EDIT_PRIVILEGE')")
     @PostMapping("update")
     public String updatePrivilege(@Valid @ModelAttribute("privilegeRequest") PrivilegeRequest privilegeRequest, BindingResult bindingResult){
-        if (privilegeService.existsByNameAndIdNot(privilegeRequest.getName(), privilegeRequest.getId())){
-            bindingResult.addError(new FieldError("privilegeRequest", "name", "A privilege with this name already exist."));
-        }
+        bindingResult = this.validateUpdatePrivilegeData(bindingResult, privilegeService, privilegeRequest);
 
         if (bindingResult.hasErrors()) return "/admin/add-edit-privilege";
 
