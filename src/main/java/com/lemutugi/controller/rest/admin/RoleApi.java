@@ -1,6 +1,7 @@
 package com.lemutugi.controller.rest.admin;
 
 import com.lemutugi.controller.util.HttpUtil;
+import com.lemutugi.model.Privilege;
 import com.lemutugi.model.Role;
 import com.lemutugi.payload.response.ApiResponse;
 import com.lemutugi.service.RoleService;
@@ -8,10 +9,7 @@ import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.HashMap;
@@ -54,6 +52,16 @@ public class RoleApi extends HttpUtil {
         data.putAll(this.addPagingAttributes(data, pageSize, pageNo, rolePage.getTotalPages(), rolePage.getTotalElements(), sortField, sortDir));
 
         ApiResponse apiResponse = new ApiResponse(true, "Roles fetched successfully");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @GetMapping("{id}")
+    ResponseEntity<ApiResponse> getRole(@PathVariable("id") Long id){
+        Role role = roleService.getRoleById(id);
+        Map<String, Object> data = new HashMap<>();
+        data.put("role", role);
+        ApiResponse apiResponse = new ApiResponse(true, "Role fetched successfully.");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
     }
