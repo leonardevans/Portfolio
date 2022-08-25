@@ -23,7 +23,7 @@ public interface UserService {
 
     User saveUser(User user);
 
-    boolean registerUser(SignUpRequest signUpRequest, String path);
+    User registerUser(SignUpRequest signUpRequest, String path);
 
     boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest, String path);
 

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -52,8 +53,13 @@ public class AuthApi extends HttpUtil {
             return ResponseEntity.badRequest().body(apiResponse);
         }
 
-        if (userService.registerUser(signUpRequest, "/api")){
+        User user = userService.registerUser(signUpRequest, "/api");
+
+        if (user != null){
+            Map<String, Object> data = new HashMap<>();
+            data.put("user", user);
             apiResponse = new ApiResponse(true, "Account created successfully. You can login with your credentials");
+            apiResponse.setData(data);
             return ResponseEntity.ok().body(apiResponse);
         }
 

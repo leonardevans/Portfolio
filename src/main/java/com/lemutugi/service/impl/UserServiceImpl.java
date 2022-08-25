@@ -101,9 +101,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registerUser(SignUpRequest signUpRequest, String path) {
+    public User registerUser(SignUpRequest signUpRequest, String path) {
+        User user = null;
         try {
-            User user = new User(signUpRequest, passwordEncoder.encode(signUpRequest.getPassword()), true, false, AuthProvider.local);
+            user = new User(signUpRequest, passwordEncoder.encode(signUpRequest.getPassword()), true, false, AuthProvider.local);
 
             Role userRole = roleRepository.findByName(ERole.ROLE_USER.name()).orElse(null);
 
@@ -130,10 +131,9 @@ public class UserServiceImpl implements UserService {
         }catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
-            return false;
         }
 
-        return true;
+        return user;
     }
 
     @Override

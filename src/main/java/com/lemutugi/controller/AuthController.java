@@ -42,7 +42,8 @@ public class AuthController extends HttpUtil {
 
         if (bindingResult.hasErrors()) return "/auth/signup";
 
-        if (userService.registerUser(signUpRequest, "")){
+        User user = userService.registerUser(signUpRequest, "");
+        if (user != null){
 
             return "redirect:/auth/signup?success";
         }
