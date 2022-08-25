@@ -93,7 +93,7 @@ public class UserApi extends HttpUtil {
         return ResponseEntity.ok().body(apiResponse);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_USER')")
+    @PreAuthorize("hasAuthority('EDIT_USER')")
     @PutMapping
     public ResponseEntity<ApiResponse> updateUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult){
         bindingResult = this.validateUpdateUserData(bindingResult, userService, userDto);
@@ -113,5 +113,17 @@ public class UserApi extends HttpUtil {
         apiResponse = new ApiResponse(true, "User updated successfully.");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_USER')")
+    @DeleteMapping("{id}")
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable("id") Long id){
+        ApiResponse apiResponse = null;
+        if (userService.deleteUserById(id)){
+            apiResponse = new ApiResponse(true, "User deleted successfully.");
+            return ResponseEntity.ok().body(apiResponse);
+        }
+        apiResponse = new ApiResponse(false, "Failed to delete user!");
+        return ResponseEntity.internalServerError().body(apiResponse);
     }
 }
