@@ -1,5 +1,6 @@
 package com.lemutugi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lemutugi.audit.Auditable;
 import com.lemutugi.payload.request.RoleRequest;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class Role extends Auditable<String> {
     @Column(unique = true, nullable = false)
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Collection<User> users;
 

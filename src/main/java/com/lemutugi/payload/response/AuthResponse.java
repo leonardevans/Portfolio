@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class AuthResponse {
+    private LocalDateTime timestamp = LocalDateTime.now();
     private boolean success;
     private String message;
     private String token;

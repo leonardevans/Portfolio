@@ -1,5 +1,6 @@
 package com.lemutugi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lemutugi.audit.Auditable;
 import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.payload.dto.UserDto;
@@ -90,6 +91,7 @@ public class User extends Auditable<String>{
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Location location;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Token token;
 

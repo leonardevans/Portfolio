@@ -26,6 +26,18 @@ public class HttpUtil {
         return model;
     }
 
+    public Map<String, Object> addPagingAttributes(Map<String, Object> data, int pageSize, int pageNo, int totalPages, long totalItems, String sortField, String sortDir){
+        data.put("pageSize", pageSize);
+        data.put("currentPage", pageNo);
+        data.put("totalPages", totalPages);
+        data.put("totalItems", totalItems);
+
+        data.put("sortField", sortField);
+        data.put("sortDir", sortDir);
+        data.put("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        return data;
+    }
+
     public Map<String, String> getErrors(BindingResult bindingResult){
         Map<String, String> errors = new HashMap<>();
 

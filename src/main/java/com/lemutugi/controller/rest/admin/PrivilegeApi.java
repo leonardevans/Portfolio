@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -52,13 +51,7 @@ public class PrivilegeApi extends HttpUtil {
         List<Privilege> privileges = privilegePage.getContent();
         data.put("privileges", privileges);
 
-        data.put("pageSize", pageSize);
-        data.put("currentPage", pageNo);
-        data.put("totalPages", privilegePage.getTotalPages());
-        data.put("totalItems", privilegePage.getTotalElements());
-
-        data.put("sortField", sortField);
-        data.put("sortDir", sortDir);
+        data.putAll(this.addPagingAttributes(data, pageSize, pageNo, privilegePage.getTotalPages(), privilegePage.getTotalElements(), sortField, sortDir));
 
         ApiResponse apiResponse = new ApiResponse(true, "Privileges fetched successfully");
         apiResponse.setData(data);
