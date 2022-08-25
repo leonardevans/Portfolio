@@ -24,7 +24,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -82,7 +84,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(UserDto userDto) {
-        User newUser = new User(userDto);
+        Set<Role> roles = new HashSet<>();
+        userDto.getRoles().forEach(role -> {
+            roles.add(roleRepository.findById(role.getId()).orElseThrow(() -> new NotFoundException("No role found with id: " + role.getId())));
+        });
+
+        User newUser = new User(userDto, roles);
         return userRepository.save(newUser);
     }
 
@@ -90,7 +97,12 @@ public class UserServiceImpl implements UserService {
     public User updateUser(UserDto userDto) {
         User user = userRepository.findById(userDto.getId()).orElseThrow(()-> new NotFoundException("No user found with id: " + userDto.getId()));
 
-        user.update(userDto);
+        Set<Role> roles = new HashSet<>();
+        userDto.getRoles().forEach(role -> {
+            roles.add(roleRepository.findById(role.getId()).orElseThrow(() -> new NotFoundException("No role found with id: " + role.getId())));
+        });
+
+        user.update(userDto, roles);
         return userRepository.save(user);
     }
 

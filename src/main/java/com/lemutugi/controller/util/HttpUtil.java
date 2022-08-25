@@ -1,5 +1,6 @@
 package com.lemutugi.controller.util;
 
+import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.request.*;
 import com.lemutugi.service.PrivilegeService;
 import com.lemutugi.service.RoleService;
@@ -111,6 +112,38 @@ public class HttpUtil {
     protected BindingResult validateUpdateRoleData(BindingResult bindingResult, RoleService roleService, RoleRequest roleRequest) {
         if (roleService.existsByNameAndIdNot(roleRequest.getName(), roleRequest.getId())){
             bindingResult.addError(new FieldError("roleRequest", "name", "A role with this name already exist."));
+        }
+
+        return bindingResult;
+    }
+
+    protected BindingResult validateCreateUserData(BindingResult bindingResult, UserService userService, UserDto userDto) {
+        if(userService.existsByEmail(userDto.getEmail())) {
+            bindingResult.addError(new FieldError("userDto", "email", "Email address already in use."));
+        }
+
+        if(userService.existsByUsername(userDto.getUsername())) {
+            bindingResult.addError(new FieldError("userDto", "username", "Username already in use."));
+        }
+
+        if(userDto.getMobile() != null && userService.existsByMobile(userDto.getMobile())) {
+            bindingResult.addError(new FieldError("userDto", "mobile", "Mobile number is already in use."));
+        }
+
+        return bindingResult;
+    }
+
+    protected BindingResult validateUpdateUserData(BindingResult bindingResult, UserService userService, UserDto userDto) {
+        if(userService.existsByEmailAndIdNot(userDto.getEmail(), userDto.getId())) {
+            bindingResult.addError(new FieldError("userDto", "email", "Email address already in use."));
+        }
+
+        if(userService.existsByUsernameAndIdNot(userDto.getUsername(), userDto.getId())) {
+            bindingResult.addError(new FieldError("userDto", "username", "Username already in use."));
+        }
+
+        if(userDto.getMobile() != null && userService.existsByMobileAndIdNot(userDto.getMobile(), userDto.getId())) {
+            bindingResult.addError(new FieldError("userDto", "mobile", "Mobile number is already in use."));
         }
 
         return bindingResult;

@@ -63,7 +63,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role updateRole(RoleRequest roleRequest) {
-
         Role role = roleRepository.findById(roleRequest.getId()).orElseThrow(() -> new NotFoundException("No role found with id: " + roleRequest.getId()));
         role.setName(roleRequest.getName());
 

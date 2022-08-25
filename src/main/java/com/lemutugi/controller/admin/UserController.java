@@ -82,17 +82,8 @@ public class UserController extends HttpUtil {
     @PreAuthorize("hasAuthority('CREATE_USER')")
     @PostMapping("add")
     public String createUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model){
-        if(userService.existsByEmail(userDto.getEmail())) {
-            bindingResult.addError(new FieldError("userDto", "email", "Email address already in use."));
-        }
+        bindingResult = this.validateCreateUserData(bindingResult, userService, userDto);
 
-        if(userService.existsByUsername(userDto.getUsername())) {
-            bindingResult.addError(new FieldError("userDto", "username", "Username already in use."));
-        }
-
-        if(userDto.getMobile() != null && userService.existsByMobile(userDto.getMobile())) {
-            bindingResult.addError(new FieldError("userDto", "mobile", "Mobile number is already in use."));
-        }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("allRoles", roleRepository.findAll());
@@ -108,17 +99,7 @@ public class UserController extends HttpUtil {
     @PreAuthorize("hasAuthority('EDIT_USER')")
     @PostMapping("update")
     public String updateUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model){
-        if(userService.existsByEmailAndIdNot(userDto.getEmail(), userDto.getId())) {
-            bindingResult.addError(new FieldError("userDto", "email", "Email address already in use."));
-        }
-
-        if(userService.existsByUsernameAndIdNot(userDto.getUsername(), userDto.getId())) {
-            bindingResult.addError(new FieldError("userDto", "username", "Username already in use."));
-        }
-
-        if(userDto.getMobile() != null && userService.existsByMobileAndIdNot(userDto.getMobile(), userDto.getId())) {
-            bindingResult.addError(new FieldError("userDto", "mobile", "Mobile number is already in use."));
-        }
+        bindingResult = this.validateUpdateUserData(bindingResult, userService, userDto);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("allRoles", roleRepository.findAll());

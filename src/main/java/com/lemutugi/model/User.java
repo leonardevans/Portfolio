@@ -107,7 +107,7 @@ public class User extends Auditable<String>{
         this.provider = provider;
     }
 
-    public User(UserDto userDto) {
+    public User(UserDto userDto, Set<Role> roles) {
         this.username = userDto.getUsername();
         this.email = userDto.getEmail();
         this.enabled = userDto.isEnabled();
@@ -132,10 +132,10 @@ public class User extends Auditable<String>{
         this.credentialsNonExpired = userDto.getCredentialsNonExpired();
         this.provider = userDto.getProvider();
         this.providerId = userDto.getProviderId();
-        this.roles = userDto.getRoles();
+        this.roles = roles;
     }
 
-    public void update(UserDto userDto){
+    public void update(UserDto userDto, Set<Role> roles){
         this.username = userDto.getUsername();
         this.email = userDto.getEmail();
         this.enabled = userDto.isEnabled();
@@ -160,6 +160,6 @@ public class User extends Auditable<String>{
         this.credentialsNonExpired = userDto.getCredentialsNonExpired();
         this.provider = userDto.getProvider();
         this.providerId = userDto.getProviderId();
-        this.roles = userDto.getRoles();
+        this.roles = roles;
     }
 }
