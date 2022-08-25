@@ -46,7 +46,6 @@ public class PrivilegeApi extends HttpUtil {
             data.put("search", search);
         }else{
             privilegePage = privilegeService.getAllPrivileges(pageNo, pageSize, sortField, sortDir);
-            data.put("search", "");
         }
         List<Privilege> privileges = privilegePage.getContent();
         data.put("privileges", privileges);

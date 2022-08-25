@@ -46,7 +46,6 @@ public class RoleApi extends HttpUtil {
             data.put("search", search);
         }else{
             rolePage = roleService.getAllRoles(pageNo, pageSize, sortField, sortDir);
-            data.put("search", "");
         }
 
         List<Role> roles = rolePage.getContent();
