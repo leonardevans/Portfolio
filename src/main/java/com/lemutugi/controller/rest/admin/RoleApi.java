@@ -82,7 +82,7 @@ public class RoleApi extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('CREATE_ROLE')")
-    @PostMapping("add")
+    @PostMapping
     public ResponseEntity<ApiResponse> createRole(@Valid @RequestBody RoleRequest roleRequest, BindingResult bindingResult){
         bindingResult = this.validateCreateRoleData(bindingResult, roleService, roleRequest);
 

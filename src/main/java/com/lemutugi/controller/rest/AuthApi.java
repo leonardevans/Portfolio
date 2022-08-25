@@ -138,7 +138,7 @@ public class AuthApi extends HttpUtil {
         if (user == null){
             apiResponse = new ApiResponse(false, "Failed to verify your password reset token. Please request another password reset token in the forgot password page.");
         }else{
-            apiResponse = new ApiResponse(true, "Password reset token verified.");
+            apiResponse = new ApiResponse(true, "Password reset token verified. You can now proceed to reset your password.");
             HashMap<String, String> data = new HashMap<>();
             data.put("email", user.getEmail());
             apiResponse.setData(data);
@@ -147,7 +147,7 @@ public class AuthApi extends HttpUtil {
         return ResponseEntity.ok().body(apiResponse);
     }
 
-    @PostMapping("reset-password")
+    @PutMapping("reset-password")
     public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest, BindingResult bindingResult){
         ApiResponse apiResponse = null;
         bindingResult = this.validateResetPasswordData(bindingResult, userService, resetPasswordRequest);
@@ -163,7 +163,7 @@ public class AuthApi extends HttpUtil {
             return ResponseEntity.ok().body(apiResponse);
         }
 
-        apiResponse = new ApiResponse(false, "Failed to email you reset password instructions!");
+        apiResponse = new ApiResponse(false, "Failed to reset your password!");
         return ResponseEntity.badRequest().body(apiResponse);
     }
 

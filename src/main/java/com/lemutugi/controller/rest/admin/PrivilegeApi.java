@@ -81,7 +81,7 @@ public class PrivilegeApi extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('CREATE_PRIVILEGE')")
-    @PostMapping("add")
+    @PostMapping
     public ResponseEntity<ApiResponse> createPrivilege(@Valid @RequestBody PrivilegeRequest privilegeRequest, BindingResult bindingResult){
         bindingResult = this.validateCreatePrivilegeData(bindingResult, privilegeService, privilegeRequest);
 
@@ -103,7 +103,7 @@ public class PrivilegeApi extends HttpUtil {
     }
 
     @PreAuthorize("hasAuthority('EDIT_PRIVILEGE')")
-    @PostMapping("update")
+    @PutMapping
     public ResponseEntity<ApiResponse> updatePrivilege(@Valid @RequestBody PrivilegeRequest privilegeRequest, BindingResult bindingResult){
         bindingResult = this.validateUpdatePrivilegeData(bindingResult, privilegeService, privilegeRequest);
 
