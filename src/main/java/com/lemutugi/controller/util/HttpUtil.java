@@ -1,8 +1,10 @@
 package com.lemutugi.controller.util;
 
 import com.lemutugi.payload.request.ForgotPasswordRequest;
+import com.lemutugi.payload.request.PrivilegeRequest;
 import com.lemutugi.payload.request.ResetPasswordRequest;
 import com.lemutugi.payload.request.SignUpRequest;
+import com.lemutugi.service.PrivilegeService;
 import com.lemutugi.service.UserService;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -67,6 +69,22 @@ public class HttpUtil {
 
         if(!bindingResult.hasErrors() && !userService.existsByEmail(resetPasswordRequest.getEmail())) {
             bindingResult.addError(new FieldError("resetPasswordRequest", "email", "This email does not exist."));
+        }
+
+        return bindingResult;
+    }
+
+    protected BindingResult validateCreatePrivilegeData(BindingResult bindingResult, PrivilegeService privilegeService, PrivilegeRequest privilegeRequest) {
+        if (privilegeService.existsByName(privilegeRequest.getName())){
+            bindingResult.addError(new FieldError("privilegeRequest", "name", "A privilege with this name already exist."));
+        }
+
+        return bindingResult;
+    }
+
+    protected BindingResult validateUpdatePrivilegeData(BindingResult bindingResult, PrivilegeService privilegeService, PrivilegeRequest privilegeRequest) {
+        if (privilegeService.existsByNameAndIdNot(privilegeRequest.getName(), privilegeRequest.getId())){
+            bindingResult.addError(new FieldError("privilegeRequest", "name", "A privilege with this name already exist."));
         }
 
         return bindingResult;

@@ -47,7 +47,7 @@ public class AuthApi extends HttpUtil {
         ApiResponse apiResponse = null;
 
         if (bindingResult.hasErrors()){
-            apiResponse = new ApiResponse(false, "Failed to created account. Please provide correct information.");
+            apiResponse = new ApiResponse(false, "Failed to create account. Please provide correct information.");
             apiResponse.setErrors(this.getErrors(bindingResult));
             return ResponseEntity.badRequest().body(apiResponse);
         }

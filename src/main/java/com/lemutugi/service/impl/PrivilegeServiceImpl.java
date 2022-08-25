@@ -47,6 +47,11 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
+    public boolean existsByNameAndIdNot(String name, Long id) {
+        return privilegeRepository.existsByNameAndIdNot(name, id);
+    }
+
+    @Override
     public Optional<Privilege> getByName(String name){
         return privilegeRepository.findByName(name);
     }

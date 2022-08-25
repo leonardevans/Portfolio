@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface PrivilegeRepository extends JpaRepository<Privilege, Long> {
     Optional<Privilege> findByName(String name);
     boolean existsByName(String name);
+    boolean existsByNameAndIdNot(String name, Long id);
 
     @Query(value = "SELECT * FROM privilege INNER jOIN roles_privileges ON roles_privileges.role_id = ?1 ", nativeQuery = true)
     Page<Privilege> findByRoleId(@Param("roleId") Long roleId, Pageable pageable);

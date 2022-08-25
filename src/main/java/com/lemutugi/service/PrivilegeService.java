@@ -18,6 +18,8 @@ public interface PrivilegeService {
 
     boolean existsByName(String name);
 
+    boolean existsByNameAndIdNot(String name, Long id);
+
     Optional<Privilege> getByName(String name);
 
     Privilege updatePrivilege(PrivilegeRequest privilegeRequest);
