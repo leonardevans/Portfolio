@@ -88,9 +88,7 @@ public class RoleController extends HttpUtil {
     @PreAuthorize("hasAuthority('CREATE_ROLE')")
     @PostMapping("add")
     public String createRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
-        if (roleService.existsByName(roleRequest.getName())){
-            bindingResult.addError(new FieldError("roleRequest", "name", "A role with this name already exist."));
-        }
+        bindingResult = this.validateCreateRoleData(bindingResult, roleService, roleRequest);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("allPrivileges", privilegeRepository.findAll());
@@ -105,13 +103,7 @@ public class RoleController extends HttpUtil {
     @PreAuthorize("hasAuthority('EDIT_ROLE')")
     @PostMapping("update")
     public String updateRole(@Valid @ModelAttribute("roleRequest") RoleRequest roleRequest, BindingResult bindingResult, Model model){
-        Optional<Role> optionalRole = roleService.getRoleByName(roleRequest.getName());
-
-        if (optionalRole.isPresent()){
-            if (optionalRole.get().getId() != roleRequest.getId()){
-                bindingResult.addError(new FieldError("roleRequest", "name", "A role with this name already exist."));
-            }
-        }
+        bindingResult = this.validateCreateRoleData(bindingResult, roleService, roleRequest);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("allPrivileges", privilegeRepository.findAll());

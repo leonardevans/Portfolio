@@ -1,10 +1,8 @@
 package com.lemutugi.controller.util;
 
-import com.lemutugi.payload.request.ForgotPasswordRequest;
-import com.lemutugi.payload.request.PrivilegeRequest;
-import com.lemutugi.payload.request.ResetPasswordRequest;
-import com.lemutugi.payload.request.SignUpRequest;
+import com.lemutugi.payload.request.*;
 import com.lemutugi.service.PrivilegeService;
+import com.lemutugi.service.RoleService;
 import com.lemutugi.service.UserService;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -97,6 +95,22 @@ public class HttpUtil {
     protected BindingResult validateUpdatePrivilegeData(BindingResult bindingResult, PrivilegeService privilegeService, PrivilegeRequest privilegeRequest) {
         if (privilegeService.existsByNameAndIdNot(privilegeRequest.getName(), privilegeRequest.getId())){
             bindingResult.addError(new FieldError("privilegeRequest", "name", "A privilege with this name already exist."));
+        }
+
+        return bindingResult;
+    }
+
+    protected BindingResult validateCreateRoleData(BindingResult bindingResult, RoleService roleService, RoleRequest roleRequest) {
+        if (roleService.existsByName(roleRequest.getName())){
+            bindingResult.addError(new FieldError("roleRequest", "name", "A role with this name already exist."));
+        }
+
+        return bindingResult;
+    }
+
+    protected BindingResult validateUpdateRoleData(BindingResult bindingResult, RoleService roleService, RoleRequest roleRequest) {
+        if (roleService.existsByNameAndIdNot(roleRequest.getName(), roleRequest.getId())){
+            bindingResult.addError(new FieldError("roleRequest", "name", "A role with this name already exist."));
         }
 
         return bindingResult;

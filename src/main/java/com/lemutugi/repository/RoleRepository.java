@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<Role, Long> {
     Optional<Role> findByName(String name);
     boolean existsByName(String name);
+    boolean existsByNameAndIdNot(String name, Long id);
 
     @Query(value = "SELECT r FROM Role r WHERE r.name LIKE %?1%", nativeQuery = false)
     Page<Role> searchByName(Pageable pageable, String search);

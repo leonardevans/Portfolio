@@ -79,4 +79,9 @@ public class RoleServiceImpl implements RoleService {
     public Long getTotalRoles(){
         return roleRepository.count();
     }
+
+    @Override
+    public boolean existsByNameAndIdNot(String name, Long id) {
+        return roleRepository.existsByNameAndIdNot(name, id);
+    }
 }

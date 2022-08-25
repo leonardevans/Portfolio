@@ -22,4 +22,6 @@ public interface RoleService {
 
     boolean deleteRoleById(Long id);
     Long getTotalRoles();
+
+    boolean existsByNameAndIdNot(String name, Long id);
 }
