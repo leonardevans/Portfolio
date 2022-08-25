@@ -3,6 +3,7 @@ package com.lemutugi.controller.rest.admin;
 import com.lemutugi.controller.util.HttpUtil;
 import com.lemutugi.model.Privilege;
 import com.lemutugi.model.Role;
+import com.lemutugi.payload.request.RoleRequest;
 import com.lemutugi.payload.response.ApiResponse;
 import com.lemutugi.service.RoleService;
 import com.lemutugi.utils.Constants;
@@ -10,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,5 +81,27 @@ public class RoleApi extends HttpUtil {
         }
         apiResponse = new ApiResponse(false, "Failed to delete role!");
         return ResponseEntity.internalServerError().body(apiResponse);
+    }
+
+    @PreAuthorize("hasAuthority('CREATE_ROLE')")
+    @PostMapping("add")
+    public ResponseEntity<ApiResponse> createRole(@Valid @RequestBody RoleRequest roleRequest, BindingResult bindingResult, Model model){
+        bindingResult = this.validateCreateRoleData(bindingResult, roleService, roleRequest);
+
+        ApiResponse apiResponse = null;
+
+        if (bindingResult.hasErrors()) {
+            apiResponse = new ApiResponse(false, "Failed to create role. Please provide correct information.");
+            apiResponse.setErrors(this.getErrors(bindingResult));
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        Role role = roleService.createRole(roleRequest);
+        data.put("role", role);
+
+        apiResponse = new ApiResponse(true, "Role created successfully.");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
     }
 }
