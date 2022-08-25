@@ -13,8 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -71,7 +72,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private Role saveRole(RoleRequest roleRequest, Role role) {
-        List<Privilege> privileges = new ArrayList<>();
+        Set<Privilege> privileges = new HashSet();
         roleRequest.getPrivileges().forEach(privilege -> {
             privileges.add(privilegeRepository.findById(privilege.getId()).orElseThrow(() -> new NotFoundException("No privilege found with id: " + privilege.getId())));
         });

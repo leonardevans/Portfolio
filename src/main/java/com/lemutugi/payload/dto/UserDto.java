@@ -9,11 +9,12 @@ import com.lemutugi.validation.constraint.ShortDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -85,7 +86,7 @@ public class UserDto {
     private Boolean accountNonLocked = true;
     private Boolean credentialsNonExpired = true;
 
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     public UserDto(User user) {
         this.id = user.getId();
@@ -113,6 +114,6 @@ public class UserDto {
         this.credentialsNonExpired = user.getCredentialsNonExpired();
         this.provider = user.getProvider();
         this.providerId = user.getProviderId();
-        this.roles = (List<Role>) user.getRoles();
+        this.roles = user.getRoles();
     }
 }

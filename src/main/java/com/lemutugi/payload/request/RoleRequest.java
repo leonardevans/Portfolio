@@ -9,7 +9,9 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,11 +23,11 @@ public class RoleRequest {
 
     private Long id;
 
-    private List<Privilege> privileges = new ArrayList<>();
+    private Set<Privilege> privileges = new HashSet();
 
     public RoleRequest(Role role) {
         this.name = role.getName();
         this.id = role.getId();
-        this.privileges = (List<Privilege>) role.getPrivileges();
+        this.privileges = role.getPrivileges();
     }
 }

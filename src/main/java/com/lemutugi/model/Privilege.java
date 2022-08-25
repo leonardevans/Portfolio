@@ -11,7 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ public class Privilege extends Auditable<String> {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "privileges", fetch = FetchType.LAZY)
-    private Collection<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     public Privilege(String name) {
         this.name = name;

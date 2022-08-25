@@ -1,6 +1,7 @@
 package com.lemutugi.controller.rest.admin;
 
 import com.lemutugi.controller.util.HttpUtil;
+import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.payload.response.ApiResponse;
 import com.lemutugi.service.UserService;
@@ -8,10 +9,7 @@ import com.lemutugi.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.HashMap;
@@ -53,6 +51,16 @@ public class UserApi extends HttpUtil {
         this.addPagingAttributes(data, pageSize, pageNo, userPage.getTotalPages(), userPage.getTotalElements(), sortField, sortDir);
 
         ApiResponse apiResponse = new ApiResponse(true, "Users fetched successfully");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @GetMapping("{id}")
+    ResponseEntity<ApiResponse> getUser(@PathVariable("id") Long id){
+        User user = userService.getUserById(id);
+        Map<String, Object> data = new HashMap<>();
+        data.put("user", user);
+        ApiResponse apiResponse = new ApiResponse(true, "User fetched successfully.");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
     }

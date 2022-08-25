@@ -1,5 +1,6 @@
 package com.lemutugi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lemutugi.audit.Auditable;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table
 @Getter
 @Setter
+@NoArgsConstructor
 public class Location extends Auditable<String> {
     private static final long serialVersionUID = 1L;
 
@@ -30,13 +32,11 @@ public class Location extends Auditable<String> {
     @Column(nullable = false)
     private String fullAddress;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",  referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
 
     @Column(name = "user_id")
     private Long userId;
-
-    public Location() {
-    }
 }
