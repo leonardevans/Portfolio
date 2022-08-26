@@ -39,7 +39,7 @@ public class SignUpRequest {
     @Password(message = "Please enter a password of minimum 8 characters and maximum 30")
     private String password;
 
-    @NotEmpty(message = "please confirm password")
+    @NotBlank(message = "please confirm password")
     private String confirmPassword;
 
 }

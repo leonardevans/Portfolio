@@ -3,6 +3,7 @@ package com.lemutugi.payload.dto;
 import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
 import com.lemutugi.model.enums.AuthProvider;
+import com.lemutugi.validation.constraint.OptionalUrl;
 import com.lemutugi.validation.constraint.PhoneNumber;
 import com.lemutugi.validation.constraint.Name;
 import com.lemutugi.validation.constraint.ShortDescription;
@@ -58,11 +59,22 @@ public class UserDto {
     @ShortDescription(message = "What I do should contain at least 50 characters and should not exceed 300 characters ")
     private String whatIDo;
 
+    @OptionalUrl(message = "Please provide valid twitter url format")
     private String twitterUrl;
+
+    @OptionalUrl(message = "Please provide valid github url format")
     private String githubUrl;
+
+    @OptionalUrl(message = "Please provide valid linkedin url format")
     private String linkedInUrl;
+
+    @OptionalUrl(message = "Please provide valid stackoverflow url format")
     private String stackoverflowUrl;
+
+    @OptionalUrl(message = "Please provide valid codepen url format")
     private String codePenUrl;
+
+    @OptionalUrl(message = "Please provide valid website url format")
     private String website;
 
     @Name(message = "Company name should contain at least 3 characters and should not exceed 50 characters")
