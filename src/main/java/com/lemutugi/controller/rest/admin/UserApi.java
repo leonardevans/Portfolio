@@ -1,9 +1,7 @@
 package com.lemutugi.controller.rest.admin;
 
 import com.lemutugi.controller.util.HttpUtil;
-import com.lemutugi.model.Role;
 import com.lemutugi.model.User;
-import com.lemutugi.model.enums.AuthProvider;
 import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.response.ApiResponse;
 import com.lemutugi.service.UserService;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 

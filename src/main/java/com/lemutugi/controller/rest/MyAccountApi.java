@@ -1,0 +1,52 @@
+package com.lemutugi.controller.rest;
+
+import com.lemutugi.controller.util.HttpUtil;
+import com.lemutugi.model.User;
+import com.lemutugi.payload.request.account.PasswordRequest;
+import com.lemutugi.payload.response.ApiResponse;
+import com.lemutugi.service.MyAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/my-account/")
+public class MyAccountApi extends HttpUtil {
+    private MyAccountService myAccountService;
+
+    @Autowired
+    public MyAccountApi(MyAccountService myAccountService) {
+        this.myAccountService = myAccountService;
+    }
+
+    @PutMapping("change-password")
+    public ResponseEntity<ApiResponse> changePassword(@Valid @RequestBody PasswordRequest passwordRequest, BindingResult bindingResult){
+        bindingResult = this.validateChangePasswordData(bindingResult, myAccountService, passwordRequest);
+
+        ApiResponse apiResponse = null;
+
+        if (bindingResult.hasErrors()) {
+            apiResponse = new ApiResponse(false, "Failed to change your password. Please provide correct information.");
+            apiResponse.setErrors(this.getErrors(bindingResult));
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        User user = myAccountService.updatePassword(passwordRequest.getNewPassword());
+        data.put("user", user);
+
+        apiResponse = new ApiResponse(true, "Password updated successfully.");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+}

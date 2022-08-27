@@ -34,9 +34,9 @@ public class SignUpRequest {
     @Email(message = "Enter valid email format")
     private String email;
 
-    @NotBlank(message = "password is required")
+    @NotBlank(message = "Password is required")
 //    @Size(min = 8, max = 30, message = "Please enter a minimum password of 8 characters and maximum 30")
-    @Password(message = "Please enter a password of minimum 8 characters and maximum 30")
+    @Password
     private String password;
 
     @NotBlank(message = "please confirm password")

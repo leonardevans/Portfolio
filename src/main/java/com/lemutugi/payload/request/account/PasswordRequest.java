@@ -1,21 +1,22 @@
 package com.lemutugi.payload.request.account;
 
+import com.lemutugi.validation.constraint.Password;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class PasswordRequest {
-//    @NotEmpty(message = "current password is required")
+    @NotBlank(message = "Please provide your current password")
     private String currentPassword;
 
-    @NotEmpty(message = "new password is required")
+    @Password
     private String newPassword;
 
-    @NotEmpty(message = "please confirm new password")
+    @NotBlank(message = "Please confirm your new password")
     private String confirmNewPassword;
 }
