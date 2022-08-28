@@ -39,6 +39,4 @@ public class LocationRequest {
     @NotBlank(message = "Full address is required")
     @Size( min = 10, message = "Full address should be at least 10 characters")
     private String fullAddress;
-
-    private Long id;
 }

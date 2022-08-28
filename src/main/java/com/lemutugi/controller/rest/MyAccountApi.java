@@ -3,10 +3,13 @@ package com.lemutugi.controller.rest;
 import com.lemutugi.controller.util.HttpUtil;
 import com.lemutugi.model.Location;
 import com.lemutugi.model.User;
+import com.lemutugi.payload.dto.MyAccountDto;
+import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.request.LocationRequest;
 import com.lemutugi.payload.request.account.PasswordRequest;
 import com.lemutugi.payload.response.ApiResponse;
 import com.lemutugi.service.MyAccountService;
+import com.lemutugi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,10 +25,12 @@ import java.util.Map;
 @RequestMapping("/api/my-account/")
 public class MyAccountApi extends HttpUtil {
     private MyAccountService myAccountService;
+    private UserService userService;
 
     @Autowired
-    public MyAccountApi(MyAccountService myAccountService) {
+    public MyAccountApi(MyAccountService myAccountService, UserService userService) {
         this.myAccountService = myAccountService;
+        this.userService = userService;
     }
 
     @PutMapping("change-password")
@@ -68,6 +73,27 @@ public class MyAccountApi extends HttpUtil {
         return ResponseEntity.ok().body(apiResponse);
     }
 
+    @PutMapping("update-account")
+    public ResponseEntity<ApiResponse> updateMyAccount(@Valid @RequestBody MyAccountDto myAccountDto, BindingResult bindingResult){
+        bindingResult = this.validateUpdateMyData(bindingResult, userService, myAccountDto);
+        ApiResponse apiResponse = null;
+
+        if (bindingResult.hasErrors()) {
+            apiResponse = new ApiResponse(false, "Failed to update your account. Please provide correct information.");
+            apiResponse.setErrors(this.getErrors(bindingResult));
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        User user = myAccountService.updateMyDetails(myAccountDto);
+        MyAccountDto myAccountDtoUpdated = new MyAccountDto(user);
+        data.put("user", myAccountDtoUpdated);
+
+        apiResponse = new ApiResponse(true, "Account updated successfully.");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
     @GetMapping("location")
     public ResponseEntity<ApiResponse> getLocation(){
         Map<String, Object> data = new HashMap<>();
@@ -75,6 +101,18 @@ public class MyAccountApi extends HttpUtil {
         data.put("location", location);
 
         ApiResponse apiResponse = new ApiResponse(true, "Location fetched successfully");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse> getDetails(){
+        Map<String, Object> data = new HashMap<>();
+        User user = myAccountService.getMyDetails();
+        MyAccountDto myAccountDto = new MyAccountDto(user);
+        data.put("user", myAccountDto);
+
+        ApiResponse apiResponse = new ApiResponse(true, "User details successfully");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
     }

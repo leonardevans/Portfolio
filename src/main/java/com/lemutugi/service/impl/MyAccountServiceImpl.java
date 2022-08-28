@@ -2,6 +2,7 @@ package com.lemutugi.service.impl;
 
 import com.lemutugi.model.Location;
 import com.lemutugi.model.User;
+import com.lemutugi.payload.dto.MyAccountDto;
 import com.lemutugi.payload.request.LocationRequest;
 import com.lemutugi.repository.LocationRepository;
 import com.lemutugi.repository.UserRepository;
@@ -60,6 +61,19 @@ public class MyAccountServiceImpl implements MyAccountService {
     public Location getMyLocation(){
         loggedInUser = authUtil.getLoggedInUser();
         return locationRepository.findByUserId(loggedInUser.getId()).orElse(null);
+    }
+
+    @Override
+    public User getMyDetails(){
+        loggedInUser = authUtil.getLoggedInUser();
+        return loggedInUser;
+    }
+
+    @Override
+    public User updateMyDetails(MyAccountDto myAccountDto) {
+        loggedInUser = authUtil.getLoggedInUser();
+        loggedInUser.update(myAccountDto);
+        return userRepository.save(loggedInUser);
     }
 
     @Override

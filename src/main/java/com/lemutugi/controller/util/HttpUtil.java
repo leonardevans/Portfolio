@@ -1,5 +1,6 @@
 package com.lemutugi.controller.util;
 
+import com.lemutugi.payload.dto.MyAccountDto;
 import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.request.*;
 import com.lemutugi.payload.request.account.PasswordRequest;
@@ -158,6 +159,22 @@ public class HttpUtil {
 
         if (!bindingResult.hasErrors() && !myAccountService.isMyPassword(passwordRequest.getCurrentPassword())){
             bindingResult.addError(new FieldError("passwordRequest", "currentPassword", "The current password provided is not correct."));
+        }
+
+        return bindingResult;
+    }
+
+    protected BindingResult validateUpdateMyData(BindingResult bindingResult, UserService userService, MyAccountDto myAccountDto) {
+        if(userService.existsByEmailAndIdNot(myAccountDto.getEmail(), myAccountDto.getId())) {
+            bindingResult.addError(new FieldError("myAccountDto", "email", "Email address already in use."));
+        }
+
+        if(userService.existsByUsernameAndIdNot(myAccountDto.getUsername(), myAccountDto.getId())) {
+            bindingResult.addError(new FieldError("myAccountDto", "username", "Username already in use."));
+        }
+
+        if(myAccountDto.getMobile() != null && userService.existsByMobileAndIdNot(myAccountDto.getMobile(), myAccountDto.getId())) {
+            bindingResult.addError(new FieldError("myAccountDto", "mobile", "Mobile number is already in use."));
         }
 
         return bindingResult;

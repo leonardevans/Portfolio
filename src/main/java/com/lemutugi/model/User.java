@@ -3,6 +3,7 @@ package com.lemutugi.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lemutugi.audit.Auditable;
 import com.lemutugi.model.enums.AuthProvider;
+import com.lemutugi.payload.dto.MyAccountDto;
 import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.request.SignUpRequest;
 import lombok.Getter;
@@ -120,7 +121,6 @@ public class User extends Auditable<String>{
         this.lName = userDto.getLName();
         this.tagline = userDto.getTagline();
         this.bio = userDto.getBio();
-        this.profilePic = userDto.getProfilePic();
         this.whatIDo = userDto.getWhatIDo();
         this.twitterUrl = userDto.getTwitterUrl();
         this.githubUrl = userDto.getGithubUrl();
@@ -148,7 +148,6 @@ public class User extends Auditable<String>{
         this.lName = userDto.getLName();
         this.tagline = userDto.getTagline();
         this.bio = userDto.getBio();
-        this.profilePic = userDto.getProfilePic();
         this.whatIDo = userDto.getWhatIDo();
         this.twitterUrl = userDto.getTwitterUrl();
         this.githubUrl = userDto.getGithubUrl();
@@ -165,5 +164,24 @@ public class User extends Auditable<String>{
         this.provider = userDto.getProvider();
         this.providerId = userDto.getProviderId();
         this.roles = roles;
+    }
+
+    public void update(MyAccountDto myAccountDto){
+        this.username = myAccountDto.getUsername();
+        this.email = myAccountDto.getEmail();
+        this.fName = myAccountDto.getFName();
+        this.lName = myAccountDto.getLName();
+        this.tagline = myAccountDto.getTagline();
+        this.bio = myAccountDto.getBio();
+        this.whatIDo = myAccountDto.getWhatIDo();
+        this.twitterUrl = myAccountDto.getTwitterUrl();
+        this.githubUrl = myAccountDto.getGithubUrl();
+        this.linkedInUrl = myAccountDto.getLinkedInUrl();
+        this.stackoverflowUrl = myAccountDto.getStackoverflowUrl();
+        this.codePenUrl = myAccountDto.getCodePenUrl();
+        this.company = myAccountDto.getCompany();
+        this.website = myAccountDto.getWebsite();
+        this.mobile = myAccountDto.getMobile();
+        this.careerSummary = myAccountDto.getCareerSummary();
     }
 }
