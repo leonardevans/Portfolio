@@ -2,6 +2,7 @@ package com.lemutugi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lemutugi.audit.Auditable;
+import com.lemutugi.payload.request.LocationRequest;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,19 +25,26 @@ public class Location extends Auditable<String> {
     private String city;
 
     @Column(nullable = false)
-    private long latitude;
+    private Double latitude;
 
     @Column(nullable = false)
-    private long longitude;
+    private Double longitude;
 
     @Column(nullable = false)
     private String fullAddress;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id",  referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id",  referencedColumnName = "id")
     private User user;
 
-    @Column(name = "user_id")
-    private Long userId;
+    public Location setData(LocationRequest locationRequest){
+        this.setPostalCode(locationRequest.getPostalCode());
+        this.setCountry(locationRequest.getCountry());
+        this.setCity(locationRequest.getCity());
+        this.setLatitude(locationRequest.getLatitude());
+        this.setLongitude(locationRequest.getLongitude());
+        this.setFullAddress(locationRequest.getFullAddress());
+        return this;
+    }
 }

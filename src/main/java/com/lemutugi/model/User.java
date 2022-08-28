@@ -25,7 +25,7 @@ public class User extends Auditable<String>{
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
 
@@ -37,8 +37,12 @@ public class User extends Auditable<String>{
     @Column(nullable = false)
     private boolean email_verified = false;
 
+    @Column(nullable = false)
     private String fName;
+
+    @Column(nullable = false)
     private String lName;
+
     private String tagline;
 
     @Column(columnDefinition = "TEXT")
