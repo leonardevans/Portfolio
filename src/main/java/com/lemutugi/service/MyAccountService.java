@@ -10,4 +10,6 @@ public interface MyAccountService {
     User updatePassword(String password);
 
     Location updateLocation(LocationRequest locationRequest);
+
+    Location getMyLocation();
 }

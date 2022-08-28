@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -67,6 +64,17 @@ public class MyAccountApi extends HttpUtil {
         data.put("location", location);
 
         apiResponse = new ApiResponse(true, "Location updated successfully.");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @GetMapping("my-location")
+    public ResponseEntity<ApiResponse> myLocation(){
+        Map<String, Object> data = new HashMap<>();
+        Location location = myAccountService.getMyLocation();
+        data.put("location", location);
+
+        ApiResponse apiResponse = new ApiResponse(true, "Location fetched successfully");
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
     }

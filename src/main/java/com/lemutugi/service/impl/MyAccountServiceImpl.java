@@ -55,4 +55,10 @@ public class MyAccountServiceImpl implements MyAccountService {
 
         return locationRepository.save(location);
     }
+
+    @Override
+    public Location getMyLocation(){
+        loggedInUser = authUtil.getLoggedInUser();
+        return locationRepository.findByUserId(loggedInUser.getId()).orElse(null);
+    }
 }
