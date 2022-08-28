@@ -18,65 +18,65 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 public class MyAccountDto {
-    private Long id;
+    protected Long id;
 
     @NotBlank(message = "Username is required")
     @Size(min = 3, message = "Username should contain at least 3 characters")
     @Size(max = 35, message = "Username should not exceed 35 characters")
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "Username should contain only letters and numbers. No special characters.")
-    private String username;
+    protected String username;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Enter valid email format")
-    private String email;
+    protected String email;
 
     @NotBlank(message = "First name is required")
     @Size(min = 3, message = "First name should contain at least 3 characters")
     @Size(max = 35, message = "First name should not exceed 35 characters")
     @Pattern(regexp = "[a-zA-Z]+", message = "First name should contain only letters")
-    private String fName;
+    protected String fName;
 
     @NotBlank(message = "Last name is required")
     @Size(min = 3, message = "Last name should contain at least 3 characters")
     @Size(max = 35, message = "Last name should not exceed 35 characters")
     @Pattern(regexp = "[a-zA-Z]+", message = "Last name should contain only letters")
-    private String lName;
+    protected String lName;
 
     @Name(message = "Tagline should contain at least 3 characters and should not exceed 50 characters")
-    private String tagline;
+    protected String tagline;
 
     @ShortDescription(message = "Bio should contain at least 50 characters and should not exceed 300 characters ")
-    private String bio;
+    protected String bio;
 
     @ShortDescription(message = "What I do should contain at least 50 characters and should not exceed 300 characters ")
-    private String whatIDo;
+    protected String whatIDo;
 
     @OptionalUrl(message = "Please provide valid twitter url format")
-    private String twitterUrl;
+    protected String twitterUrl;
 
     @OptionalUrl(message = "Please provide valid github url format")
-    private String githubUrl;
+    protected String githubUrl;
 
     @OptionalUrl(message = "Please provide valid linkedin url format")
-    private String linkedInUrl;
+    protected String linkedInUrl;
 
     @OptionalUrl(message = "Please provide valid stackoverflow url format")
-    private String stackoverflowUrl;
+    protected String stackoverflowUrl;
 
     @OptionalUrl(message = "Please provide valid codepen url format")
-    private String codePenUrl;
+    protected String codePenUrl;
 
     @OptionalUrl(message = "Please provide valid website url format")
-    private String website;
+    protected String website;
 
     @Name(message = "Company name should contain at least 3 characters and should not exceed 50 characters")
-    private String company;
+    protected String company;
 
     @PhoneNumber(message = "Please provide a valid mobile number")
-    private Long mobile;
+    protected Long mobile;
 
     @ShortDescription(message = "Career summary should contain at least 50 characters and should not exceed 300 characters ")
-    private String careerSummary;
+    protected String careerSummary;
 
     public MyAccountDto(User user) {
         this.id = user.getId();

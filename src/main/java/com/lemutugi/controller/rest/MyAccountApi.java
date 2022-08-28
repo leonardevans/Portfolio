@@ -4,7 +4,6 @@ import com.lemutugi.controller.util.HttpUtil;
 import com.lemutugi.model.Location;
 import com.lemutugi.model.User;
 import com.lemutugi.payload.dto.MyAccountDto;
-import com.lemutugi.payload.dto.UserDto;
 import com.lemutugi.payload.request.LocationRequest;
 import com.lemutugi.payload.request.account.PasswordRequest;
 import com.lemutugi.payload.response.ApiResponse;
@@ -13,10 +12,8 @@ import com.lemutugi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
