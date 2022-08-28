@@ -34,7 +34,7 @@ public class Location extends Auditable<String> {
     private String fullAddress;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id",  referencedColumnName = "id")
     private User user;
 

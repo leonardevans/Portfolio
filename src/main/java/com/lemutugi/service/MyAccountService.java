@@ -12,4 +12,6 @@ public interface MyAccountService {
     Location updateLocation(LocationRequest locationRequest);
 
     Location getMyLocation();
+
+    boolean deleteMyLocation();
 }

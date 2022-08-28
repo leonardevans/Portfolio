@@ -61,4 +61,21 @@ public class MyAccountServiceImpl implements MyAccountService {
         loggedInUser = authUtil.getLoggedInUser();
         return locationRepository.findByUserId(loggedInUser.getId()).orElse(null);
     }
+
+    @Override
+    public boolean deleteMyLocation(){
+        loggedInUser = authUtil.getLoggedInUser();
+        Location location = locationRepository.findByUserId(loggedInUser.getId()).orElse(null);
+
+        try{
+            if (location != null){
+                locationRepository.deleteById(location.getId());
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

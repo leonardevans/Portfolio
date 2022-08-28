@@ -93,11 +93,11 @@ public class User extends Auditable<String>{
                     name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet();
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Location location;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Token token;
 
     public User(SignUpRequest signUpRequest, String password, boolean enabled, boolean email_verified, AuthProvider provider) {

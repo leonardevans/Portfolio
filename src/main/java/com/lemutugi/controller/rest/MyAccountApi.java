@@ -68,14 +68,27 @@ public class MyAccountApi extends HttpUtil {
         return ResponseEntity.ok().body(apiResponse);
     }
 
-    @GetMapping("my-location")
-    public ResponseEntity<ApiResponse> myLocation(){
+    @GetMapping("location")
+    public ResponseEntity<ApiResponse> getLocation(){
         Map<String, Object> data = new HashMap<>();
         Location location = myAccountService.getMyLocation();
         data.put("location", location);
 
         ApiResponse apiResponse = new ApiResponse(true, "Location fetched successfully");
         apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @DeleteMapping("location")
+    public ResponseEntity<ApiResponse> deleteLocation(){
+        ApiResponse apiResponse = null;
+
+        if (myAccountService.deleteMyLocation()){
+            apiResponse = new ApiResponse(true, "Location deleted successfully");
+        }else{
+            apiResponse = new ApiResponse(false, "Failed to delete location");
+        }
+
         return ResponseEntity.ok().body(apiResponse);
     }
 }
