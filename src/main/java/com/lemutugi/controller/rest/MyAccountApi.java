@@ -6,6 +6,7 @@ import com.lemutugi.model.User;
 import com.lemutugi.payload.dto.MyAccountDto;
 import com.lemutugi.payload.request.LocationRequest;
 import com.lemutugi.payload.request.account.PasswordRequest;
+import com.lemutugi.payload.request.account.ProfilePictureRequest;
 import com.lemutugi.payload.response.ApiResponse;
 import com.lemutugi.service.MyAccountService;
 import com.lemutugi.service.UserService;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,6 +89,30 @@ public class MyAccountApi extends HttpUtil {
         data.put("user", myAccountDtoUpdated);
 
         apiResponse = new ApiResponse(true, "Account updated successfully.");
+        apiResponse.setData(data);
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PutMapping(value = "update-profile-pic" )
+    public ResponseEntity<ApiResponse> updateProfilePic(@Valid @ModelAttribute ProfilePictureRequest profilePictureRequest, BindingResult bindingResult) throws IOException {
+        ApiResponse apiResponse = null;
+
+        if (bindingResult.hasErrors()) {
+            apiResponse = new ApiResponse(false, "Failed to update your profile picture. Please provide correct information.");
+            apiResponse.setErrors(this.getErrors(bindingResult));
+            return ResponseEntity.badRequest().body(apiResponse);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        String profilePic = myAccountService.updateProfilePic(profilePictureRequest);
+
+        if (profilePic == null){
+            apiResponse = new ApiResponse(false, "An error occurred while updating your profile picture.");
+        }else{
+            data.put("profilePic", profilePic);
+            apiResponse = new ApiResponse(true, "Profile picture updated successfully.");
+        }
+
         apiResponse.setData(data);
         return ResponseEntity.ok().body(apiResponse);
     }

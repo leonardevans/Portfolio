@@ -20,6 +20,8 @@ import javax.validation.constraints.Size;
 public class MyAccountDto {
     protected Long id;
 
+    protected String profilePic;
+
     @NotBlank(message = "Username is required")
     @Size(min = 3, message = "Username should contain at least 3 characters")
     @Size(max = 35, message = "Username should not exceed 35 characters")
@@ -80,6 +82,7 @@ public class MyAccountDto {
 
     public MyAccountDto(User user) {
         this.id = user.getId();
+        this.profilePic = user.getProfilePic();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.fName = user.getFName();

@@ -4,13 +4,17 @@ import com.lemutugi.model.Location;
 import com.lemutugi.model.User;
 import com.lemutugi.payload.dto.MyAccountDto;
 import com.lemutugi.payload.request.LocationRequest;
+import com.lemutugi.payload.request.account.ProfilePictureRequest;
 import com.lemutugi.repository.LocationRepository;
 import com.lemutugi.repository.UserRepository;
 import com.lemutugi.security.AuthUtil;
+import com.lemutugi.service.FileUploadService;
 import com.lemutugi.service.MyAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class MyAccountServiceImpl implements MyAccountService {
@@ -19,13 +23,15 @@ public class MyAccountServiceImpl implements MyAccountService {
     private PasswordEncoder passwordEncoder;
     private User loggedInUser;
     private LocationRepository locationRepository;
+    private FileUploadService fileUploadService;
 
     @Autowired
-    public MyAccountServiceImpl(UserRepository userRepository, AuthUtil authUtil, PasswordEncoder passwordEncoder, LocationRepository locationRepository) {
+    public MyAccountServiceImpl(UserRepository userRepository, AuthUtil authUtil, PasswordEncoder passwordEncoder, LocationRepository locationRepository, FileUploadService fileUploadService) {
         this.userRepository = userRepository;
         this.authUtil = authUtil;
         this.passwordEncoder = passwordEncoder;
         this.locationRepository = locationRepository;
+        this.fileUploadService = fileUploadService;
     }
 
     @Override
@@ -55,6 +61,25 @@ public class MyAccountServiceImpl implements MyAccountService {
         location.setData(locationRequest);
 
         return locationRepository.save(location);
+    }
+
+    @Override
+    public String updateProfilePic(ProfilePictureRequest profilePictureRequest) throws IOException {
+        loggedInUser = authUtil.getLoggedInUser();
+
+        String filename =  fileUploadService.uploadToLocal(profilePictureRequest.getProfilePic(),"uploads/images/profile/");
+
+        if (filename == null){
+            return  null;
+        }
+
+        if(loggedInUser.getProfilePic() != null){
+            fileUploadService.deleteLocalFile(loggedInUser.getProfilePic().substring(1));
+        }
+
+        loggedInUser.setProfilePic("/" + filename);
+        userRepository.save(loggedInUser);
+        return  filename;
     }
 
     @Override

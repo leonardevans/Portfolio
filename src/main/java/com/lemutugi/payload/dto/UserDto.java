@@ -37,6 +37,7 @@ public class UserDto extends MyAccountDto{
 
     public UserDto(User user) {
         this.id = user.getId();
+        this.profilePic = user.getProfilePic();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.fName = user.getFName();

@@ -23,6 +23,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             return filename;
         }catch (Exception e){
             System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -33,6 +34,8 @@ public class FileUploadServiceImpl implements FileUploadService {
             FileUtils.forceDelete(FileUtils.getFile(filePath));
             return true;
         }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
