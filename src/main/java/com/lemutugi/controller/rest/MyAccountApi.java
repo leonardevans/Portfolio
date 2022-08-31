@@ -145,9 +145,9 @@ public class MyAccountApi extends HttpUtil {
         ApiResponse apiResponse = null;
 
         if (myAccountService.deleteMyLocation()){
-            apiResponse = new ApiResponse(true, "Location deleted successfully");
+            apiResponse = new ApiResponse(true, "Location deleted successfully.");
         }else{
-            apiResponse = new ApiResponse(false, "Failed to delete location");
+            apiResponse = new ApiResponse(false, "Failed to delete location.");
         }
 
         return ResponseEntity.ok().body(apiResponse);

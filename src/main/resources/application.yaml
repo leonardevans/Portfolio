@@ -15,9 +15,12 @@ spring:
   thymeleaf:
     cache: false
   datasource:
-    url: jdbc:mysql://localhost:3306/lemutugi?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
-    username: leo
-    password: "@LeoMysqlP2022"
+#    url: jdbc:mysql://localhost:3306/lemutugi?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+#    username: leo
+#    password: "@LeoMysqlP2022"
+    url: jdbc:mysql://us-cdbr-east-06.cleardb.net/heroku_bc44ec410788589?reconnect=true
+    username: bb6452925b5fba
+    password: ebcebfa2
   jpa:
     show-sql: true
     hibernate:
@@ -64,6 +67,8 @@ spring:
       max-file-size: 2MB
       max-request-size: 5MB
       enabled: true
+  resources:
+    static-locations: classpath:templates/
 #Enable debug
 logging:
   level:

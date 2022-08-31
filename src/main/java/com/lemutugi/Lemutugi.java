@@ -10,7 +10,9 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -20,7 +22,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @OpenAPIDefinition(info = @Info(title = "Lemutugi API", version = "2.0", description = "Lemutugi Rest API Documentation"))
 @SecurityScheme(name = "lemutugi-api", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
-public class Lemutugi {
+public class Lemutugi extends SpringBootServletInitializer {
     @Bean
     public AuditorAware<String> auditorAware(){
         return new AuditorWareImpl();
@@ -33,6 +35,11 @@ public class Lemutugi {
 
     public static void main(String[] args) {
         SpringApplication.run(Lemutugi.class, args);
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Lemutugi.class);
     }
 
 }
