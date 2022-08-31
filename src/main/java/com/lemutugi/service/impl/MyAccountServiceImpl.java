@@ -117,4 +117,27 @@ public class MyAccountServiceImpl implements MyAccountService {
         }
         return true;
     }
+
+    @Override
+    public boolean deleteProfilePic(){
+        loggedInUser = authUtil.getLoggedInUser();
+        boolean deleted = false;
+
+        try{
+            if (loggedInUser.getProfilePic() == null){
+                deleted = true;
+            }
+            else if (fileUploadService.deleteLocalFile(loggedInUser.getProfilePic().substring(1))){
+                loggedInUser.setProfilePic(null);
+                userRepository.save(loggedInUser);
+                deleted = true;
+            }
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return deleted;
+    }
 }

@@ -152,4 +152,17 @@ public class MyAccountApi extends HttpUtil {
 
         return ResponseEntity.ok().body(apiResponse);
     }
+
+    @DeleteMapping("delete-profile-pic")
+    public ResponseEntity<ApiResponse> deleteProfilePic(){
+        ApiResponse apiResponse = null;
+
+        if (myAccountService.deleteProfilePic()){
+            apiResponse = new ApiResponse(true, "Profile picture deleted successfully.");
+        }else{
+            apiResponse = new ApiResponse(false, "Failed to delete profile picture.");
+        }
+
+        return ResponseEntity.ok().body(apiResponse);
+    }
 }

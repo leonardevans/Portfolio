@@ -25,4 +25,6 @@ public interface MyAccountService {
     User updateMyDetails(MyAccountDto myAccountDto);
 
     boolean deleteMyLocation();
+
+    boolean deleteProfilePic();
 }
