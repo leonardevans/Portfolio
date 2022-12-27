@@ -3,8 +3,8 @@ spring:
   mail:
     host: smtp.googlemail.com
     port: 587
-    username: 1032792@cuea.edu
-    password: '@cuea.edu'
+    username:
+    password:
     properties:
       mail:
         smtp:
@@ -16,11 +16,8 @@ spring:
     cache: false
   datasource:
 #    url: jdbc:mysql://localhost:3306/lemutugi?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
-#    username: leo
-#    password: "@LeoMysqlP2022"
-    url: jdbc:mysql://us-cdbr-east-06.cleardb.net/heroku_bc44ec410788589?reconnect=true
-    username: bb6452925b5fba
-    password: ebcebfa2
+#    username:
+#    password:
   jpa:
     show-sql: true
     hibernate:
@@ -37,22 +34,22 @@ spring:
       client:
         registration:
           google:
-            clientId: 486721347118-1e4bdj1cb0p70kjbjpthhjo5oqec4ejs.apps.googleusercontent.com
-            clientSecret: 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
+            clientId:
+            clientSecret:
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
               - profile
           facebook:
-            clientId: 121189305185277
-            clientSecret: 42ffe5aa7379e8326387e0fe16f34132
+            clientId:
+            clientSecret:
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}" # Note that facebook now mandates the use of https redirect URIs, so make sure your app supports https in production
             scope:
               - email
               - public_profile
           github:
-            clientId: d3e47fc2ddd966fa4352
-            clientSecret: 3bc0f6b8332f93076354c2a5bada2f5a05aea60d
+            clientId:
+            clientSecret:
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - user:email
@@ -98,6 +95,6 @@ BASE_URL:
   http://localhost:8080
 
 notifications:
-  from: lemutugi@gmail.com
-  to: lemutugi@gmail.com
-  cc: lemutugi@gmail.com
+  from:
+  to:
+  cc:
