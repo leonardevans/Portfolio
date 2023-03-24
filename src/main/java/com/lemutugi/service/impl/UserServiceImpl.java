@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
             }
             user.getRoles().add(userRole);
 
-            user = this.saveUser(user);
+            user = userRepository.save(user);
 
             Token token = this.createToken(user, TokenType.EMAIL_VERIFIATION);
 
